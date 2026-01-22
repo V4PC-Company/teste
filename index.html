@@ -146,8 +146,8 @@
                     <div class="card span-8"><span class="card-title" style="margin-bottom: 20px;">STATUS DO FUNIL (Detalhado)</span><div style="height: 200px;"><canvas id="chartLive"></canvas></div></div>
 
                     <div class="card span-12">
-                        <span class="card-title" style="margin-bottom: 20px;">VOLUME DE REPASSES (Por Categoria)</span>
-                        <div style="height: 250px;"><canvas id="chartRepasseOverview"></canvas></div>
+                        <span class="card-title" style="margin-bottom: 20px;">TOP GERENTES (Por Volume de Repasse)</span>
+                        <div style="height: 300px;"><canvas id="chartRepasseOverview"></canvas></div>
                     </div>
                 </div>
             </div>
@@ -200,7 +200,6 @@
         // CONFIG LINKS
         const LEADS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSq7tm8TN8KWT9sFip9UkeghlkZUOf3J-PKP035h1_EKNvOh-SXCcOakUTXKS5NI2xJ-hzRzQFruaRg/pub?gid=1787906905&single=true&output=csv';
         const LIVE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS8KWWCjb7eYtXhLEpsgxgRI7wurO2HqO0YLcoSAKxkdLTuVGNiQ86HRMz5AKLaIJbnckxl9P4d6TJP/pub?gid=859560778&single=true&output=csv';
-        // NOVA URL ADICIONADA
         const REPASSE_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4VzCT82OlId7PUor1-cs7e-Phj47EhC5ViQPEtZ8QitfCBUBASg1WUlUIHb6ShIBH9vYSJqPkd3Yq/pub?gid=0&single=true&output=csv';
 
         const COORDENADAS = {
@@ -295,22 +294,15 @@
             return result;
         }
 
-        // --- LÓGICA DE REPASSE (NOVA) ---
         function renderRepasseTable(data) {
             const tableHead = document.querySelector("#tabela-repasse thead");
             const tableBody = document.querySelector("#tabela-repasse tbody");
             const headers = data[0];
-            
-            // Render Headers (Cabeçalho)
             tableHead.innerHTML = `<tr>${headers.map(h => `<th style="padding: 12px; border-bottom: 2px solid #333; color: white;">${h}</th>`).join('')}</tr>`;
-            
-            // Render Body (Corpo da tabela)
             tableBody.innerHTML = data.slice(1).map(row => {
-                // Evita linhas vazias
                 if(row.length < 1 || !row[0]) return '';
                 return `<tr style="border-bottom: 1px solid #222;">${row.map(cell => `<td style="padding: 12px; color: var(--text-muted);">${cell}</td>`).join('')}</tr>`;
             }).join('');
-
             document.getElementById('total-repasse').innerText = `${data.length - 1} Registros Encontrados`;
         }
 
@@ -319,8 +311,6 @@
             const filter = input.value.toUpperCase();
             const table = document.getElementById("tabela-repasse");
             const tr = table.getElementsByTagName("tr");
-
-            // Começa do 1 para pular o cabeçalho
             for (let i = 1; i < tr.length; i++) {
                 let txtValue = tr[i].textContent || tr[i].innerText;
                 if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -331,43 +321,52 @@
             }
         }
 
+        // --- LÓGICA ATUALIZADA DO GRÁFICO DE REPASSE ---
         function updateRepasseChart(data) {
+            // 1. Encontrar o índice da coluna "Gerente"
+            const headers = data[0].map(h => h.toUpperCase().trim());
+            let mgrIndex = headers.findIndex(h => h.includes("GERENTE REGIONAL") || h.includes("GERENTE EXECUTIVO") || h.includes("GERENTE"));
+            
+            // Fallback: Se não achar, usa a coluna 1
+            if (mgrIndex === -1) mgrIndex = 1; 
+
             const rows = data.slice(1);
-            // Conta agrupado pela segunda coluna (Índice 1) - Ajuste se necessário
             const counts = {};
+            
+            // 2. Contar frequência
             rows.forEach(r => {
-                if(!r[0]) return; // Pula linha vazia
-                const label = r[1] ? r[1].trim() : "Não Informado"; 
-                counts[label] = (counts[label] || 0) + 1;
+                if(!r[0]) return;
+                const rawName = r[mgrIndex] ? r[mgrIndex].trim() : "N/D";
+                // Limpeza básica de nome se necessário (opcional)
+                const name = rawName === "" ? "N/D" : rawName;
+                counts[name] = (counts[name] || 0) + 1;
             });
 
-            // Ordena do maior para o menor e pega top 8
-            const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 8);
+            // 3. Ordenar do maior para o menor
+            const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 10); // Top 10
             
             chartRepasseOverview.data.labels = sorted.map(i => i[0]);
             chartRepasseOverview.data.datasets[0].data = sorted.map(i => i[1]);
             chartRepasseOverview.update();
         }
-        // --------------------------------
 
         async function fetchData() {
             try {
-                // FETCH SIMULTÂNEO (LEADS, LIVES E REPASSE)
                 const [resLeads, resLive, resRepasse] = await Promise.all([
                     fetch(LEADS_URL).then(r => r.text()),
                     LIVE_SHEET_URL ? fetch(LIVE_SHEET_URL).then(r => r.text()) : Promise.resolve(""),
                     fetch(REPASSE_URL).then(r => r.text())
                 ]);
 
-                // 1. Processar Repasse
+                // Repasse
                 const rowsRepasse = parseCSV(resRepasse);
                 renderRepasseTable(rowsRepasse);
-                updateRepasseChart(rowsRepasse);
+                updateRepasseChart(rowsRepasse); // Chama a função atualizada
 
-                // 2. Processar Leads
+                // Leads
                 const rowsLeads = parseCSV(resLeads);
                 
-                // 3. Processar Lives
+                // Lives
                 let liveStats = { presente: 0, ausente: 0, agendado: 0 };
                 let liveTimeline = {};
                 
@@ -391,12 +390,11 @@
                     });
                 }
 
-                // Lógica Leads Original
                 const headers = rowsLeads[0].map(h => h.toUpperCase().trim());
                 const IDX = {
                     DATA: headers.findIndex(h => h.includes("DATA")),
                     CIDADE: headers.findIndex(h => h.includes("CIDADE")),
-                    STATUS_K: 10, // COLUNA K
+                    STATUS_K: 10, 
                     STATUS_COLS: []
                 };
                 headers.forEach((h, i) => { if (h.includes("TENTATIVA")) IDX.STATUS_COLS.push(i); });
@@ -430,7 +428,6 @@
         }
 
         function updateDashboard(leads, liveStats, liveTimeline) {
-            // --- GRÁFICO 1: STATUS DA BASE (COLUNA K) ---
             const k_ativos = leads.filter(l => l.statusK === "ATIVO").length; 
             const k_qualificados = leads.filter(l => l.statusK.includes("QUALIFICADO")).length;
             const k_inativos = leads.filter(l => l.statusK.includes("INATIVO") || l.statusK.includes("DESATIVAR")).length;
@@ -534,13 +531,13 @@
             chartLeadsTimeline = new Chart(document.getElementById('chartLeadsTimeline'), { type: 'line', data: { datasets: [{ label: 'Novos Leads', data: [], borderColor: '#ff1f2d', backgroundColor: 'rgba(255, 31, 45, 0.1)', fill: true, tension: 0.4 }] }, options: commonLineOptions });
             chartLivesTimeline = new Chart(document.getElementById('chartLivesTimeline'), { type: 'line', data: { datasets: [{ label: 'Cadastros Live', data: [], borderColor: '#ffd700', backgroundColor: 'rgba(255, 215, 0, 0.1)', fill: true, tension: 0.4 }] }, options: commonLineOptions });
         
-            // NOVO GRÁFICO DE REPASSE
+            // CHART REPASSE (GERENTES)
             chartRepasseOverview = new Chart(document.getElementById('chartRepasseOverview'), {
                 type: 'bar',
                 data: {
-                    labels: [], // Preenchido via JS
+                    labels: [],
                     datasets: [{
-                        label: 'Registros',
+                        label: 'Volume de Repasses',
                         data: [],
                         backgroundColor: '#ff1f2d',
                         borderRadius: 5,
