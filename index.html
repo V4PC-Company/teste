@@ -237,7 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
   .swiper-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .swiper-slide:not(.swiper-slide-active) { filter: blur(2px); transform: scale(0.9); opacity: 0.7; }
   
-  /* --- CORREÇÃO DAS SETAS (KILL AZUL / KEEP PRETO) --- */
+  /* SETAS PRETAS */
   .swiper-button-next::after, 
   .swiper-button-prev::after {
     content: "" !important;
@@ -247,7 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
   .swiper-button-prev svg {
     width: 30px !important;
     height: 30px !important;
-    fill: #000000 !important; /* PRETO */
+    fill: #000000 !important;
   }
   .swiper-button-prev,
   .swiper-button-next {
@@ -257,7 +257,6 @@ document.addEventListener("DOMContentLoaded", () => {
     height: auto !important;
     top: 55%; 
   }
-  /* ---------------------------------------------------- */
 
   @media (max-width: 991px) {
     .section-carrossel { flex-direction: column; text-align: center; gap: 30px; padding: 40px 20px; }
@@ -296,31 +295,27 @@ document.addEventListener("DOMContentLoaded", () => {
 <script>
 document.addEventListener("DOMContentLoaded", function() {
   
-  // --- CONFIGURAÇÃO INDIVIDUAL DOS BOTÕES ---
+  // --- LINKS PARA TESTE ---
   const dadosDoCarrossel = [
-    // Slide 1: ADMINISTRAÇÃO (Link Ativo)
     {
       titulo: "ADMINISTRAÇÃO",
       texto: "Este é o modelo de parceria mais completo, onde a Nobile assume a gestão integral do seu hotel, visando a manutenção do patrimônio e a maximização da rentabilidade.",
-      link: "https://www.google.com.br" 
+      link: "https://www.google.com.br" // TESTE: Vai para o Google
     },
-    // Slide 2: FRANQUIA (Modo Manutenção - Link #)
     {
       titulo: "FRANQUIA",
       texto: "Conteúdo em atualização. Estamos preparando informações detalhadas sobre este modelo. Aguarde novidades em breve.",
-      link: "https://www.youtube.com/" // O símbolo # impede que o link abra qualquer página
+      link: "https://www.youtube.com" // TESTE: Vai para o YouTube
     },
-    // Slide 3: ASSOCIAÇÃO (Modo Manutenção - Link #)
     {
       titulo: "ASSOCIAÇÃO",
       texto: "Conteúdo em atualização. Estamos preparando informações detalhadas sobre este modelo. Aguarde novidades em breve.",
-      link: "https://www.uol.com.br" 
+      link: "https://www.uol.com.br" // TESTE: Vai para o UOL
     },
-    // Slide 4: LICENCIAMENTO (Modo Manutenção - Link #)
     {
       titulo: "LICENCIAMENTO",
       texto: "Conteúdo em atualização. Estamos preparando informações detalhadas sobre este modelo. Aguarde novidades em breve.",
-      link: "https://www.globo.com" 
+      link: "https://www.globo.com" // TESTE: Vai para a Globo
     }
   ];
 
@@ -329,26 +324,38 @@ document.addEventListener("DOMContentLoaded", function() {
   const btnEl = document.getElementById("btn-carrossel");
   const caixaEl = document.getElementById("caixa-texto");
 
-  new Swiper(".mySwiper", {
+  // Função que atualiza o texto e link (Usada no Inicio e na Mudança)
+  function atualizarSlide(index) {
+    if (dadosDoCarrossel[index]) {
+      // Atualiza os dados
+      tituloEl.innerText = dadosDoCarrossel[index].titulo;
+      textoEl.innerHTML = dadosDoCarrossel[index].texto;
+      btnEl.href = dadosDoCarrossel[index].link;
+    }
+  }
+
+  // Inicializa o Swiper
+  const swiper = new Swiper(".mySwiper", {
     loop: true, centeredSlides: true, slidesPerView: 1.2, spaceBetween: 20, grabCursor: true,
     autoplay: { delay: 5000, disableOnInteraction: false },
     navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
     breakpoints: { 992: { slidesPerView: 1.4 } },
     on: {
+      // Quando o slide mudar
       slideChange: function () {
         const index = this.realIndex;
-        caixaEl.style.opacity = "0";
+        caixaEl.style.opacity = "0"; // Esconde
         setTimeout(() => {
-          if (dadosDoCarrossel[index]) {
-            tituloEl.innerText = dadosDoCarrossel[index].titulo;
-            textoEl.innerHTML = dadosDoCarrossel[index].texto;
-            btnEl.href = dadosDoCarrossel[index].link; // AQUI O LINK É TROCADO INDIVIDUALMENTE
-          }
-          caixaEl.style.opacity = "1";
+          atualizarSlide(index); // Atualiza
+          caixaEl.style.opacity = "1"; // Mostra
         }, 300);
       }
     }
   });
+
+  // *** CORREÇÃO: FORÇA A ATUALIZAÇÃO DO PRIMEIRO SLIDE AO CARREGAR ***
+  atualizarSlide(0);
+
 });
 </script>
 
@@ -360,7 +367,7 @@ document.addEventListener("DOMContentLoaded", function() {
 .representante-texto h2 { font-size: 30px; font-weight: 800; color: #fff; margin-bottom: 10px; }
 .representante-form {
   flex: 1 1 45%; background-image: url("https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/form-1.png");
-  background-size: cover; height: auto; padding: 75px; /* Ajuste para caber tudo */
+  background-size: cover; height: auto; padding: 75px;
 }
 .representante-form form { display: flex; flex-direction: column; gap: 10px; }
 .representante-form input[type="text"], 
@@ -368,16 +375,9 @@ document.addEventListener("DOMContentLoaded", function() {
 .representante-form input[type="tel"] { 
     padding: 12px; border-radius: 10px; border: 1px solid #ccc; width: 100%; 
 }
-/* Estilo para as perguntas */
-.form-label-pergunta {
-    color: #000; font-weight: bold; margin-top: 15px; margin-bottom: 5px; display: block; text-align: left;
-}
-.form-radio-group {
-    display: flex; gap: 20px; align-items: center; margin-bottom: 10px;
-}
-.form-radio-group label {
-    color: #000; font-weight: normal; cursor: pointer; display: flex; align-items: center; gap: 5px;
-}
+.form-label-pergunta { color: #000; font-weight: bold; margin-top: 15px; margin-bottom: 5px; display: block; text-align: left; }
+.form-radio-group { display: flex; gap: 20px; align-items: center; margin-bottom: 10px; }
+.form-radio-group label { color: #000; font-weight: normal; cursor: pointer; display: flex; align-items: center; gap: 5px; }
 
 .btn-enviar { background-color: #1b3b6f; color: #fff; border: none; padding: 15px; border-radius: 50px; cursor: pointer; font-weight: bold; margin-top: 15px; font-size: 16px; }
 .btn-enviar:hover { background-color: #2a7fa1; transform: scale(1.02); transition: 0.3s; }
@@ -423,6 +423,7 @@ document.addEventListener("DOMContentLoaded", function() {
           <label><input type="radio" name="carteira" value="Sim"> Sim</label>
           <label><input type="radio" name="carteira" value="Não"> Não</label>
       </div>
+
       <button type="submit" class="btn-enviar">Quero ser um Representante Nobile</button>
     </form>
   </div>
