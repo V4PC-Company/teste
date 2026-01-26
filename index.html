@@ -512,65 +512,43 @@ document.addEventListener("DOMContentLoaded", () => {
 <!-- Seção de Carrossel -->
 <div class="section-carrossel">
   <div class="texto" id="texto-carrossel">
-    <h2>ADMINISTRAÇÃO</h2>
-    <p>
+    <h2 id="titulo-dinamico">ADMINISTRAÇÃO</h2>
+    <p id="paragrafo-dinamico">
       Este é o modelo de parceria mais completo, onde a Nobile assume a gestão
-      integral do seu hotel, visando a manutenção do patrimônio e a maximização
-      da rentabilidade.
+      integral do seu hotel.
     </p>
     <a href="#" class="btn">CLIQUE PARA SABER MAIS</a>
   </div>
 
   <div class="swiper mySwiper">
     <div class="swiper-wrapper">
-      <!-- SLIDE 1 -->
-      <div
-        class="swiper-slide"
-        data-title="ADMINISTRAÇÃO"
-        data-text="Gestão completa com excelência operacional e rentabilidade comprovada."
-      >
-        <img
-          src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Fachada-Hotel-Nobile-1.png"
-          alt="Administração Nobile"
-        />
+      
+      <div class="swiper-slide">
+        <img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Fachada-Hotel-Nobile-1.png" alt="Administração Nobile" />
       </div>
 
-      <!-- SLIDE 2 -->
-      <div
-        class="swiper-slide"
-        data-title="FRANQUIA"
-        data-text="Seu hotel operando sob os padrões e reconhecimento de uma marca consolidada."
-      >
-        <img
-          src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Gemini_Generated_Image_lm473ylm473ylm47.png"
-          alt="Franquia Nobile"
-        />
+      <div class="swiper-slide">
+        <img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Gemini_Generated_Image_lm473ylm473ylm47.png" alt="Franquia Nobile" />
       </div>
 
-      <!-- SLIDE 3 -->
-      <div
-        class="swiper-slide"
-        data-title="ASSOCIAÇÃO"
-        data-text="Sua gestão independente com a inteligência de vendas da Nobile."
-      >
-        <img
-          src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Selo-Hotel-Nobile.png"
-          alt="Associação Nobile"
-        />
+      <div class="swiper-slide">
+        <img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Selo-Hotel-Nobile.png" alt="Associação Nobile" />
       </div>
 
-      <!-- SLIDE 4 -->
-      <div
-        class="swiper-slide"
-        data-title="LICENCIAMENTO"
-        data-text="Modelo focado em alavancar seu negócio através do uso da reputação da marca Nobile, agregando padrões de qualidade e acesso a canais de vendas."
-      >
-        <img
-          src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Quarto-Hotel-Nobile.png"
-          alt="Licenciamento Nobile"
-        />
+      <div class="swiper-slide">
+        <img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Quarto-Hotel-Nobile.png" alt="Licenciamento Nobile" />
       </div>
+      
     </div>
+
+    <div class="swiper-button-prev">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></svg>
+    </div>
+    <div class="swiper-button-next">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"></path></svg>
+    </div>
+  </div>
+</div>
 
     <!-- Botões de navegação -->
     <div class="swiper-button-prev">
