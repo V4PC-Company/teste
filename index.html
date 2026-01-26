@@ -237,22 +237,23 @@ document.addEventListener("DOMContentLoaded", () => {
   .swiper-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .swiper-slide:not(.swiper-slide-active) { filter: blur(2px); transform: scale(0.9); opacity: 0.7; }
   
-  /* --- ESTILO DAS SETAS (ALTERADO PARA PRETO) --- */
+  /* --- CORREÇÃO DAS SETAS (Pequenas e Pretas) --- */
   .swiper-button-next svg,
   .swiper-button-prev svg {
-    width: 30px; /* Aumentei um pouco para ficar visível sem o círculo */
+    width: 30px; /* Tamanho da seta */
     height: 30px;
     fill: #000000 !important; /* Cor Preta */
   }
 
   .swiper-button-prev,
   .swiper-button-next {
-    /* Removendo o fundo branco redondo */
+    /* Remove o fundo branco circular e sombras */
     background-color: transparent !important;
     box-shadow: none !important;
     border-radius: 0 !important;
     width: auto !important;
     height: auto !important;
+    top: 55%; /* Ajuste fino da posição vertical se necessário */
   }
   /* ----------------------------------------------- */
 
@@ -261,6 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .section-carrossel .texto { max-width: 100%; }
     .section-carrossel h2, .section-carrossel p { min-height: auto; }
     .swiper { width: 100%; max-width: 350px; height: 400px; }
+    .swiper-button-prev, .swiper-button-next { top: auto; bottom: 0; } /* Ajuste mobile */
   }
 </style>
 
@@ -286,33 +288,35 @@ document.addEventListener("DOMContentLoaded", () => {
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-  // --- CONFIGURAÇÃO: EDITE OS LINKS AQUI ---
+  
+  // --- ÁREA DE EDIÇÃO: TEXTOS E LINKS DOS SLIDES ---
   const dadosDoCarrossel = [
-    // Slide 1 (Pronto)
+    // Slide 1: ADMINISTRAÇÃO
     {
       titulo: "ADMINISTRAÇÃO",
       texto: "Este é o modelo de parceria mais completo, onde a Nobile assume a gestão integral do seu hotel, visando a manutenção do patrimônio e a maximização da rentabilidade.",
-      link: "https://www.nobilehoteis.com.br/contato/" // Link Slide 1
+      link: "#manutencao-adm" // <--- SUBSTITUA PELA URL DA PÁGINA DE MANUTENÇÃO/DESTINO
     },
-    // Slide 2 (Em manutenção)
+    // Slide 2: FRANQUIA (Texto de Manutenção)
     {
       titulo: "FRANQUIA",
       texto: "Conteúdo em atualização. Estamos preparando informações detalhadas sobre este modelo. Aguarde novidades em breve.",
-      link: "#" // Link inativo
+      link: "#manutencao-franquia" // <--- SUBSTITUA PELA URL DA PÁGINA DE MANUTENÇÃO/DESTINO
     },
-    // Slide 3 (Em manutenção)
+    // Slide 3: ASSOCIAÇÃO (Texto de Manutenção)
     {
       titulo: "ASSOCIAÇÃO",
       texto: "Conteúdo em atualização. Estamos preparando informações detalhadas sobre este modelo. Aguarde novidades em breve.",
-      link: "#" // Link inativo
+      link: "#manutencao-associacao" // <--- SUBSTITUA PELA URL DA PÁGINA DE MANUTENÇÃO/DESTINO
     },
-    // Slide 4 (Em manutenção)
+    // Slide 4: LICENCIAMENTO (Texto de Manutenção)
     {
       titulo: "LICENCIAMENTO",
       texto: "Conteúdo em atualização. Estamos preparando informações detalhadas sobre este modelo. Aguarde novidades em breve.",
-      link: "#" // Link inativo
+      link: "#manutencao-licenciamento" // <--- SUBSTITUA PELA URL DA PÁGINA DE MANUTENÇÃO/DESTINO
     }
   ];
+  // --------------------------------------------------
 
   const tituloEl = document.getElementById("titulo-dinamico");
   const textoEl = document.getElementById("paragrafo-dinamico");
