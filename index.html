@@ -237,11 +237,24 @@ document.addEventListener("DOMContentLoaded", () => {
   .swiper-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .swiper-slide:not(.swiper-slide-active) { filter: blur(2px); transform: scale(0.9); opacity: 0.7; }
   
-  .swiper-button-next svg, .swiper-button-prev svg { width: 24px; height: 24px; fill: #1b3b6f; }
-  .swiper-button-prev, .swiper-button-next {
-    background-color: rgba(255, 255, 255, 0.8); width: 45px; height: 45px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  /* --- ESTILO DAS SETAS (ALTERADO PARA PRETO) --- */
+  .swiper-button-next svg,
+  .swiper-button-prev svg {
+    width: 30px; /* Aumentei um pouco para ficar visível sem o círculo */
+    height: 30px;
+    fill: #000000 !important; /* Cor Preta */
   }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    /* Removendo o fundo branco redondo */
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    width: auto !important;
+    height: auto !important;
+  }
+  /* ----------------------------------------------- */
 
   @media (max-width: 991px) {
     .section-carrossel { flex-direction: column; text-align: center; gap: 30px; padding: 40px 20px; }
@@ -275,25 +288,29 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", function() {
   // --- CONFIGURAÇÃO: EDITE OS LINKS AQUI ---
   const dadosDoCarrossel = [
+    // Slide 1 (Pronto)
     {
       titulo: "ADMINISTRAÇÃO",
       texto: "Este é o modelo de parceria mais completo, onde a Nobile assume a gestão integral do seu hotel, visando a manutenção do patrimônio e a maximização da rentabilidade.",
       link: "https://www.nobilehoteis.com.br/contato/" // Link Slide 1
     },
+    // Slide 2 (Em manutenção)
     {
       titulo: "FRANQUIA",
-      texto: "Seu hotel operando sob os padrões e reconhecimento de uma marca consolidada. Ideal para quem busca padronização internacional mantendo a gestão local.",
-      link: "https://www.nobilehoteis.com.br/marcas/" // Link Slide 2
+      texto: "Conteúdo em atualização. Estamos preparando informações detalhadas sobre este modelo. Aguarde novidades em breve.",
+      link: "#" // Link inativo
     },
+    // Slide 3 (Em manutenção)
     {
       titulo: "ASSOCIAÇÃO",
-      texto: "Sua gestão independente com a <b>inteligência de vendas da Nobile</b>. Tenha acesso à força comercial e distribuição global sem mudar sua bandeira.",
-      link: "https://www.nobilehoteis.com.br/nobile-plus/" // Link Slide 3
+      texto: "Conteúdo em atualização. Estamos preparando informações detalhadas sobre este modelo. Aguarde novidades em breve.",
+      link: "#" // Link inativo
     },
+    // Slide 4 (Em manutenção)
     {
       titulo: "LICENCIAMENTO",
-      texto: "Modelo focado em alavancar seu negócio através do uso da reputação da marca Nobile, agregando padrões de qualidade e acesso a canais de vendas exclusivos.",
-      link: "https://www.nobilehoteis.com.br/investidores/" // Link Slide 4
+      texto: "Conteúdo em atualização. Estamos preparando informações detalhadas sobre este modelo. Aguarde novidades em breve.",
+      link: "#" // Link inativo
     }
   ];
 
