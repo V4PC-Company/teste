@@ -238,23 +238,17 @@ document.addEventListener("DOMContentLoaded", () => {
   .swiper-slide:not(.swiper-slide-active) { filter: blur(2px); transform: scale(0.9); opacity: 0.7; }
   
   /* --- CORREÇÃO DAS SETAS (KILL AZUL / KEEP PRETO) --- */
-  
-  /* 1. Esconde a seta padrão (azul) */
   .swiper-button-next::after, 
   .swiper-button-prev::after {
     content: "" !important;
     display: none !important;
   }
-
-  /* 2. Estiliza o SVG (Preto) */
   .swiper-button-next svg,
   .swiper-button-prev svg {
     width: 30px !important;
     height: 30px !important;
     fill: #000000 !important; /* PRETO */
   }
-
-  /* 3. Remove fundos e sombras */
   .swiper-button-prev,
   .swiper-button-next {
     background-color: transparent !important;
@@ -302,27 +296,27 @@ document.addEventListener("DOMContentLoaded", () => {
 <script>
 document.addEventListener("DOMContentLoaded", function() {
   
-  // --- EDITE OS LINKS ABAIXO DENTRO DAS ASPAS "" ---
+  // --- CONFIGURAÇÃO INDIVIDUAL DOS BOTÕES ---
   const dadosDoCarrossel = [
-    // Slide 1: ADMINISTRAÇÃO (Ativo)
+    // Slide 1: ADMINISTRAÇÃO (Link Ativo)
     {
       titulo: "ADMINISTRAÇÃO",
       texto: "Este é o modelo de parceria mais completo, onde a Nobile assume a gestão integral do seu hotel, visando a manutenção do patrimônio e a maximização da rentabilidade.",
       link: "https://www.nobilehoteis.com.br/contato/" 
     },
-    // Slide 2: FRANQUIA (Manutenção)
+    // Slide 2: FRANQUIA (Modo Manutenção - Link #)
     {
       titulo: "FRANQUIA",
       texto: "Conteúdo em atualização. Estamos preparando informações detalhadas sobre este modelo. Aguarde novidades em breve.",
-      link: "#" 
+      link: "#" // O símbolo # impede que o link abra qualquer página
     },
-    // Slide 3: ASSOCIAÇÃO (Manutenção)
+    // Slide 3: ASSOCIAÇÃO (Modo Manutenção - Link #)
     {
       titulo: "ASSOCIAÇÃO",
       texto: "Conteúdo em atualização. Estamos preparando informações detalhadas sobre este modelo. Aguarde novidades em breve.",
       link: "#" 
     },
-    // Slide 4: LICENCIAMENTO (Manutenção)
+    // Slide 4: LICENCIAMENTO (Modo Manutenção - Link #)
     {
       titulo: "LICENCIAMENTO",
       texto: "Conteúdo em atualização. Estamos preparando informações detalhadas sobre este modelo. Aguarde novidades em breve.",
@@ -348,7 +342,7 @@ document.addEventListener("DOMContentLoaded", function() {
           if (dadosDoCarrossel[index]) {
             tituloEl.innerText = dadosDoCarrossel[index].titulo;
             textoEl.innerHTML = dadosDoCarrossel[index].texto;
-            btnEl.href = dadosDoCarrossel[index].link; 
+            btnEl.href = dadosDoCarrossel[index].link; // AQUI O LINK É TROCADO INDIVIDUALMENTE
           }
           caixaEl.style.opacity = "1";
         }, 300);
