@@ -360,11 +360,27 @@ document.addEventListener("DOMContentLoaded", function() {
 .representante-texto h2 { font-size: 30px; font-weight: 800; color: #fff; margin-bottom: 10px; }
 .representante-form {
   flex: 1 1 45%; background-image: url("https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/form-1.png");
-  background-size: cover; height: 655px; padding: 75px;
+  background-size: cover; height: auto; padding: 75px; /* Ajuste para caber tudo */
 }
 .representante-form form { display: flex; flex-direction: column; gap: 10px; }
-.representante-form input { padding: 12px; border-radius: 10px; border: 1px solid #ccc; width: 100%; }
-.btn-enviar { background-color: #1b3b6f; color: #fff; border: none; padding: 10px; border-radius: 50px; cursor: pointer; font-weight: bold; }
+.representante-form input[type="text"], 
+.representante-form input[type="email"], 
+.representante-form input[type="tel"] { 
+    padding: 12px; border-radius: 10px; border: 1px solid #ccc; width: 100%; 
+}
+/* Estilo para as perguntas */
+.form-label-pergunta {
+    color: #000; font-weight: bold; margin-top: 15px; margin-bottom: 5px; display: block; text-align: left;
+}
+.form-radio-group {
+    display: flex; gap: 20px; align-items: center; margin-bottom: 10px;
+}
+.form-radio-group label {
+    color: #000; font-weight: normal; cursor: pointer; display: flex; align-items: center; gap: 5px;
+}
+
+.btn-enviar { background-color: #1b3b6f; color: #fff; border: none; padding: 15px; border-radius: 50px; cursor: pointer; font-weight: bold; margin-top: 15px; font-size: 16px; }
+.btn-enviar:hover { background-color: #2a7fa1; transform: scale(1.02); transition: 0.3s; }
 
 @media (max-width: 900px) {
   .section-representante { flex-direction: column; padding: 60px 20px; }
@@ -388,13 +404,26 @@ document.addEventListener("DOMContentLoaded", function() {
     <p>Preencha as informações ao lado e entraremos em contato.</p>
     <img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Logo_em-alta_branco_NBL-1.png" width="180" alt="Logo">
   </div>
+  
   <div class="representante-form">
     <form action="#" method="post">
       <input type="text" name="nome" placeholder="Nome Completo" required>
       <input type="email" name="email" placeholder="E-mail Corporativo" required>
       <input type="tel" name="telefone" placeholder="Telefone / WhatsApp" required>
-      <input type="text" name="cidade" placeholder="Cidade e Estado" required>
-      <button type="submit" class="btn-enviar">Quero ser um Representante</button>
+      <input type="text" name="cidade" placeholder="Cidade e Estado de Atuação" required>
+      
+      <label class="form-label-pergunta">Você já atua no segmento hoteleiro ou imobiliário?</label>
+      <div class="form-radio-group">
+          <label><input type="radio" name="segmento" value="Sim"> Sim</label>
+          <label><input type="radio" name="segmento" value="Não"> Não</label>
+      </div>
+
+      <label class="form-label-pergunta">Você possui carteira de hotéis, empreendimentos ou investidores ativos?</label>
+      <div class="form-radio-group">
+          <label><input type="radio" name="carteira" value="Sim"> Sim</label>
+          <label><input type="radio" name="carteira" value="Não"> Não</label>
+      </div>
+      <button type="submit" class="btn-enviar">Quero ser um Representante Nobile</button>
     </form>
   </div>
 </div>
