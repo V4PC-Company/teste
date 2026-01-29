@@ -1,455 +1,664 @@
-<style>
-.banner_topo {
-  margin-top: -50px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 100px 60px;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-image: url("https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/bnn-lp-nobile.jpg");
-}
-.banner_topo .container {
-  max-width: 1400px;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  text-align: left !important;
-}
-.banner_topo .area_flex {
-  display: flex;
-  height: 800px;
-  flex-flow: row wrap;
-  justify-content: flex-start;
-  align-items: center;
-  text-align: left !important;
-}
-.banner_topo .caixa {
-  width: 70%;
-  padding: 158px;
-  text-align: left !important;
-}
-.banner_topo h1 {
-  color: #fff;
-  font-size: 48px;
-  margin-bottom: 20px;
-  text-align: left !important;
-  font-weight: bold;
-  line-height: 1.2;
-}
-.banner_topo p {
-  color: #fff;
-  font-size: 20px;
-  line-height: 1.6;
-  text-align: left !important;
-  margin-bottom: 0;
-}
-@media (max-width: 991px) {
-  .banner_topo {
-    height: auto;
-    margin-top: -20px;
-    padding: 15px 20px;
-    background-image: url("https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/12/bnn-lp-nobile-responsivo.png");
-  }
-  .banner_topo .area_flex {
-    height: 500px;
-    flex-flow: column;
-    align-items: flex-start;
-  }
-  .banner_topo .caixa {
-    width: 100%;
-    padding: 25px;
-  }
-  .banner_topo h1 { font-size: 30px; }
-  .banner_topo p { font-size: 15px; }
-}
-</style>
+import React, { useState, useEffect } from 'react';
+import { ShoppingCart, Search, Menu, User, Heart, ChevronDown, ChevronRight, X, Ruler, PenTool, Truck, ShieldCheck, CreditCard } from 'lucide-react';
 
-<div class="banner_topo">
-  <div class="container area_flex">
-    <div class="caixa wow zoomIn animated">
-      <h1 class="fonte_especial">Impulsione seu hotel com a Nobile Hotels & Resorts</h1>
-      <p>Potencialize a rentabilidade do seu hotel com a força de inteligência de vendas e a experiência da 5ª maior rede hoteleira do Brasil.</p>
+// --- BRAND CONSTANTS & DATA ---
+const COLORS = {
+  white: '#FFFFFF',
+  paleGreen: '#ECFAD2',
+  sageGreen: '#747D64',
+  gold: '#A48955',
+  darkGrey: '#383838',
+  lightGrey: '#f5f5f5'
+};
+
+const MOCK_PRODUCTS = [
+  { id: 1, name: 'Tecido Linho Premium', category: 'Tecidos', price: 89.90, oldPrice: 120.00, image: 'https://placehold.co/300x300/ECFAD2/747D64?text=Linho+Premium', rating: 5 },
+  { id: 2, name: 'Kit Persiana Rolo Blackout', category: 'Kits Prontos', price: 249.90, oldPrice: 350.00, image: 'https://placehold.co/300x300/747D64/FFFFFF?text=Rolo+Blackout', rating: 4 },
+  { id: 3, name: 'Tecido Voil Transparente', category: 'Tecidos', price: 45.90, oldPrice: 60.00, image: 'https://placehold.co/300x300/FFFFFF/A48955?text=Voil+Leve', rating: 5 },
+  { id: 4, name: 'Motor para Automação', category: 'Acessórios', price: 599.90, oldPrice: 750.00, image: 'https://placehold.co/300x300/383838/FFFFFF?text=Motor+Smart', rating: 5 },
+  { id: 5, name: 'Trilho Suíço Duplo 2m', category: 'Acessórios', price: 129.90, oldPrice: 159.90, image: 'https://placehold.co/300x300/e0e0e0/383838?text=Trilho+Duplo', rating: 4 },
+  { id: 6, name: 'Persiana Romana Rústica', category: 'Kits Prontos', price: 389.90, oldPrice: 499.00, image: 'https://placehold.co/300x300/A48955/FFFFFF?text=Romana+Rustica', rating: 5 },
+  { id: 7, name: 'Veludo Molhado Royal', category: 'Tecidos', price: 110.00, oldPrice: 140.00, image: 'https://placehold.co/300x300/383838/A48955?text=Veludo+Royal', rating: 4 },
+  { id: 8, name: 'Abraçadeira Magnética', category: 'Acessórios', price: 29.90, oldPrice: 49.90, image: 'https://placehold.co/300x300/A48955/FFFFFF?text=Abracadeira', rating: 3 },
+];
+
+const DEPARTMENTS = [
+  'Tecidos por Metro', 'Persianas Rolo', 'Persianas Romanas', 'Trilhos e Varões', 'Motorização', 'Acessórios', 'Outlet'
+];
+
+// --- COMPONENTS ---
+
+// 1. HEADER (Inspired by Pichau structure but branded)
+const Header = ({ cartCount, onNavigate, onSearch }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  return (
+    <header className="w-full shadow-md sticky top-0 z-50">
+      {/* Top Bar - Dark Brand Color */}
+      <div style={{ backgroundColor: COLORS.darkGrey }} className="text-white text-xs py-2 px-4 flex justify-between items-center hidden md:flex">
+        <div className="flex gap-4">
+          <span>Fale Conosco: (11) 9999-9999</span>
+          <span>E-mail: contato@curtainscorner.com</span>
+        </div>
+        <div className="flex gap-4">
+          <span className="cursor-pointer hover:text-gray-300">Rastrear Pedido</span>
+          <span className="cursor-pointer hover:text-gray-300">Seja um Parceiro (Arquitetos)</span>
+        </div>
+      </div>
+
+      {/* Main Header */}
+      <div className="bg-white py-4 px-4 md:px-8 border-b border-gray-100">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+          
+          {/* Logo Area */}
+          <div 
+            className="flex flex-col items-center cursor-pointer min-w-[120px]"
+            onClick={() => onNavigate('home')}
+          >
+            <h1 style={{ color: COLORS.darkGrey }} className="font-sans text-2xl font-light tracking-widest leading-none">CURTAINS</h1>
+            <h2 style={{ color: COLORS.gold }} className="font-sans text-sm font-bold tracking-[0.2em]">CORNER</h2>
+            <span style={{ color: COLORS.sageGreen }} className="text-[10px] tracking-widest">BY DEUX</span>
+          </div>
+
+          {/* Department Trigger & Search (Pichau Style) */}
+          <div className="hidden md:flex items-center flex-1 max-w-3xl gap-2">
+            <button 
+              className="flex items-center gap-2 px-4 py-3 rounded text-white font-semibold transition-colors"
+              style={{ backgroundColor: COLORS.sageGreen }}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <Menu size={20} />
+              <span className="uppercase text-sm">Departamentos</span>
+            </button>
+
+            <div className="flex-1 relative">
+              <input 
+                type="text" 
+                placeholder="O que você procura para suas janelas?" 
+                className="w-full pl-4 pr-10 py-3 bg-gray-100 rounded border border-transparent focus:border-sage-500 focus:bg-white focus:outline-none transition-all text-sm"
+              />
+              <Search className="absolute right-3 top-3 text-gray-400 cursor-pointer" size={20} />
+            </div>
+          </div>
+
+          {/* User Actions */}
+          <div className="flex items-center gap-6 text-gray-600">
+            <div className="flex flex-col items-center cursor-pointer hover:text-sage-700 transition hidden sm:flex">
+              <User size={24} />
+              <span className="text-[10px] font-bold uppercase mt-1">Entrar</span>
+            </div>
+            <div className="flex flex-col items-center cursor-pointer hover:text-sage-700 transition hidden sm:flex">
+              <Heart size={24} />
+              <span className="text-[10px] font-bold uppercase mt-1">Favoritos</span>
+            </div>
+            <div 
+              className="flex flex-col items-center cursor-pointer hover:text-sage-700 transition relative"
+              onClick={() => onNavigate('cart')}
+            >
+              <div className="relative">
+                <ShoppingCart size={24} />
+                {cartCount > 0 && (
+                  <span style={{ backgroundColor: COLORS.gold }} className="absolute -top-2 -right-2 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                    {cartCount}
+                  </span>
+                )}
+              </div>
+              <span className="text-[10px] font-bold uppercase mt-1">Carrinho</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Search & Menu (Visible only on mobile) */}
+      <div className="md:hidden p-2 bg-white border-b border-gray-100">
+         <div className="relative">
+            <input 
+              type="text" 
+              placeholder="Buscar produtos..." 
+              className="w-full pl-4 pr-10 py-2 bg-gray-100 rounded text-sm"
+            />
+            <Search className="absolute right-3 top-2 text-gray-400" size={18} />
+          </div>
+      </div>
+
+      {/* Department Dropdown (Overlay) */}
+      {isMenuOpen && (
+        <div className="absolute top-full left-0 w-64 bg-white shadow-xl border-t border-gray-100 z-40 hidden md:block ml-[max(2rem,calc((100vw-80rem)/2))]">
+          <ul className="py-2">
+            {DEPARTMENTS.map((dept, idx) => (
+              <li key={idx} className="px-6 py-3 hover:bg-gray-50 text-sm text-gray-700 font-medium cursor-pointer flex justify-between items-center group">
+                {dept}
+                <ChevronRight size={14} className="text-gray-300 group-hover:text-sage-500" />
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </header>
+  );
+};
+
+// 2. HERO SECTION
+const Hero = () => {
+  return (
+    <div className="w-full bg-gray-100 relative h-[300px] md:h-[450px] overflow-hidden group">
+      <img 
+        src="https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
+        alt="Luxury Interior" 
+        className="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent flex items-center px-4 md:px-16">
+        <div className="max-w-xl text-white">
+          <span style={{ color: COLORS.paleGreen }} className="text-sm font-bold tracking-widest uppercase mb-2 block">
+            Nova Coleção
+          </span>
+          <h2 className="text-4xl md:text-6xl font-light mb-6 leading-tight">
+            Elegância que <br/> <span className="font-serif italic">veste janelas</span>
+          </h2>
+          <p className="mb-8 text-gray-200 text-sm md:text-base max-w-md">
+            Transforme sua casa em uma experiência sensorial. Tecidos premium e confecção sob medida.
+          </p>
+          <button 
+            style={{ backgroundColor: COLORS.gold }} 
+            className="px-8 py-3 rounded text-white font-bold uppercase text-sm tracking-wider hover:bg-yellow-700 transition"
+          >
+            Ver Ofertas
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+  );
+};
 
-<style>
-.solu-empresa {
-  background: #fff;
-  border-radius: 5%;
-  margin-top: -30px;
-  padding: 7px 30px;
-  position: relative; 
-  z-index: 2;
-}
-.solu-empresa .area_flex {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 30px;
-}
-.solu-empresa .caixa {
-  width: 50%;
-  padding: 90px;
-  text-align: left;
-}
-.solu-empresa .caixa1 {
-  width: 25%;
-  padding: 200px;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-image: url("https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/img-lp-nobile.png");
-  min-height: 400px;
-}
-.solu-empresa h2 {
-  color: #1b3b6f;
-  font-size: 40px;
-  margin-bottom: 15px;
-  font-weight: bold;
-}
-.solu-empresa p {
-  color: #000;
-  font-size: 16px;
-  line-height: 24px;
-  text-align: justify;
-}
-@media (max-width: 991px) {
-  .solu-empresa { margin-top: -50px; }
-  .solu-empresa .area_flex { flex-flow: column; align-items: center; }
-  .solu-empresa .caixa, .solu-empresa .caixa1 { width: 100%; padding: 20px; text-align: center; }
-  .solu-empresa .caixa1 { border-radius: 20%; min-height: 300px; }
-}
-</style>
-
-<div class="solu-empresa">
-  <div class="container area_flex">
-    <div class="caixa">
-      <h2 class="fonte_especial">Soluções ideais para o sucesso do seu hotel</h2>
-      <p>Da gestão integral à autonomia com suporte: a Nobile oferece 4 modelos de parceria para <b>maximizar a receita e valorizar o seu ativo.</b><br>
-      Com 17 anos de excelência no mercado hoteleiro, a Nobile Hotels & Resorts impulsiona a alta performance do seu empreendimento.</p>
+// 3. PRODUCT CARD
+const ProductCard = ({ product, onAdd }) => {
+  return (
+    <div className="bg-white border border-gray-100 rounded-lg overflow-hidden hover:shadow-lg transition-shadow group flex flex-col h-full">
+      <div className="relative h-64 overflow-hidden bg-gray-100">
+        <img 
+          src={product.image} 
+          alt={product.name} 
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        />
+        <div className="absolute top-2 right-2 bg-white/90 rounded-full p-1.5 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+          <Heart size={18} className="text-gray-400 hover:text-red-500" />
+        </div>
+        {product.id === 1 && (
+          <div style={{ backgroundColor: COLORS.sageGreen }} className="absolute top-2 left-2 text-white text-[10px] font-bold px-2 py-1 rounded-sm uppercase">
+            Destaque
+          </div>
+        )}
+      </div>
+      
+      <div className="p-4 flex flex-col flex-1">
+        <span className="text-[10px] text-gray-400 uppercase tracking-wider mb-1">{product.category}</span>
+        <h3 className="text-gray-700 font-medium text-sm mb-2 line-clamp-2 min-h-[40px] leading-snug">
+          {product.name}
+        </h3>
+        
+        <div className="mt-auto">
+            <div className="flex items-center gap-2 mb-1">
+                <span className="text-xs text-gray-400 line-through">R$ {product.oldPrice.toFixed(2)}</span>
+                <span style={{ backgroundColor: COLORS.paleGreen, color: COLORS.sageGreen }} className="text-[10px] font-bold px-1.5 rounded">
+                    -{(100 - (product.price / product.oldPrice * 100)).toFixed(0)}%
+                </span>
+            </div>
+            <div style={{ color: COLORS.gold }} className="text-xl font-bold mb-1">
+            R$ {product.price.toFixed(2)}
+            </div>
+            <div className="text-[10px] text-gray-500 mb-3">
+            à vista no PIX
+            </div>
+            
+            <button 
+            onClick={() => onAdd(product)}
+            style={{ borderColor: COLORS.sageGreen, color: COLORS.sageGreen }}
+            className="w-full border py-2 rounded text-xs font-bold uppercase hover:bg-sage-50 transition-colors flex items-center justify-center gap-2 group-hover:bg-sage-600 group-hover:text-white"
+            >
+            <ShoppingCart size={14} />
+            Comprar
+            </button>
+        </div>
+      </div>
     </div>
-    <div class="caixa1"></div>
-  </div>
-</div>
+  );
+};
 
-<style>
-.whatsapp1 {
-  padding: 40px 20px;
-  background: linear-gradient(to right, #2A7FA1, #26377F);
-  margin: 20px;
-  border-radius: 50px;
-}
-.whatsapp1 .area_flex {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 30px;
-  text-align: center;
-}
-.whatsapp1 h3 {
-  color: #fff;
-  font-size: 40px;
-  font-weight: bold;
-}
-.whatsapp1 p {
-  color: #fff;
-  font-size: 16px;
-}
-@media (max-width: 991px) {
-  .whatsapp1 .area_flex { flex-direction: column; }
-}
-</style>
-
-<div class="whatsapp1">
-  <div class="container area_flex">
-    <div class="caixa">
-      <h3 class="count" data-target="8000">+0</h3>
-      <p>Quartos, a 5ª Maior rede do Brasil</p>
-    </div>
-    <div class="caixa">
-      <h3 class="count" data-target="3000000">+0</h3>
-      <p>Hóspedes satisfeitos por ano em 7 Países</p>
-    </div>
-    <div class="caixa">
-      <h3 class="count" data-target="250000">+0</h3>
-      <p>Clientes fidelizados ao Programa Nobile Plus</p>
-    </div>
-  </div>
-</div>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const counters = document.querySelectorAll('.count');
-  const observer = new IntersectionObserver((entries, obs) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const tgt = Number(entry.target.getAttribute('data-target'));
-        let start = 0;
-        const duration = 1500; 
-        const startTime = performance.now();
-        function step(now) {
-          const progress = Math.min((now - startTime) / duration, 1);
-          entry.target.innerText = '+' + Math.floor(progress * tgt).toLocaleString('pt-BR');
-          if (progress < 1) requestAnimationFrame(step);
-          else entry.target.innerText = '+' + tgt.toLocaleString('pt-BR');
-        }
-        requestAnimationFrame(step);
-        obs.unobserve(entry.target);
-      }
-    });
+// 4. CUSTOM BUILDER (Monte sua Persiana)
+const CustomBuilder = ({ onAddToCart }) => {
+  const [step, setStep] = useState(1);
+  const [config, setConfig] = useState({
+    width: 100,
+    height: 100,
+    material: null,
+    color: null,
+    mount: 'teto'
   });
-  counters.forEach(c => observer.observe(c));
-});
-</script>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-<style>
-  .section-carrossel {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 60px;
-    padding: 60px 225px;
-    background-color: #fff;
-    border-radius: 20px;
-    overflow: hidden;
-    max-width: 100%;
-    box-sizing: border-box;
-    position: relative;
-  }
-  .section-carrossel .texto { flex: 1; max-width: 480px; transition: opacity 0.4s ease; }
-  .section-carrossel h2 { color: #1b3b6f; font-size: 32px; font-weight: 800; margin-bottom: 15px; min-height: 40px; }
-  .section-carrossel p { font-size: 16px; color: #333; margin-bottom: 20px; line-height: 1.6; min-height: 80px; }
-  
-  .section-carrossel .btn {
-    display: inline-block; background-color: #1b3b6f; color: #fff; padding: 12px 40px;
-    border-radius: 8px; text-decoration: none; font-weight: 600; transition: 0.3s;
-  }
-  .section-carrossel .btn:hover { background-color: #2a7fa1; transform: scale(1.05); }
-
-  .swiper { width: 420px; height: 500px; position: relative; padding-bottom: 40px; }
-  .swiper-slide { border-radius: 20px; overflow: hidden; transition: all 0.4s ease; background: #fff; }
-  .swiper-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .swiper-slide:not(.swiper-slide-active) { filter: blur(2px); transform: scale(0.9); opacity: 0.7; }
-  
-  /* SETAS PRETAS */
-  .swiper-button-next::after, 
-  .swiper-button-prev::after {
-    content: "" !important;
-    display: none !important;
-  }
-  .swiper-button-next svg,
-  .swiper-button-prev svg {
-    width: 30px !important;
-    height: 30px !important;
-    fill: #000000 !important;
-  }
-  .swiper-button-prev,
-  .swiper-button-next {
-    background-color: transparent !important;
-    box-shadow: none !important;
-    width: auto !important;
-    height: auto !important;
-    top: 55%; 
-  }
-
-  @media (max-width: 991px) {
-    .section-carrossel { flex-direction: column; text-align: center; gap: 30px; padding: 40px 20px; }
-    .section-carrossel .texto { max-width: 100%; }
-    .section-carrossel h2, .section-carrossel p { min-height: auto; }
-    .swiper { width: 100%; max-width: 350px; height: 400px; }
-    .swiper-button-prev, .swiper-button-next { top: auto; bottom: 0; }
-  }
-</style>
-
-<div class="section-carrossel">
-  <div class="texto" id="caixa-texto">
-    <h2 id="titulo-dinamico">Carregando...</h2>
-    <p id="paragrafo-dinamico">Aguarde...</p>
-    <a href="#" class="btn" id="btn-carrossel">CLIQUE PARA SABER MAIS</a>
-  </div>
-
-  <div class="swiper mySwiper">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide"><img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Fachada-Hotel-Nobile-1.png" alt="Administração"></div>
-      <div class="swiper-slide"><img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Gemini_Generated_Image_lm473ylm473ylm47.png" alt="Franquia"></div>
-      <div class="swiper-slide"><img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Selo-Hotel-Nobile.png" alt="Associação"></div>
-      <div class="swiper-slide"><img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Quarto-Hotel-Nobile.png" alt="Licenciamento"></div>
-    </div>
-    
-    <div class="swiper-button-prev">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></svg>
-    </div>
-    <div class="swiper-button-next">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"></path></svg>
-    </div>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  
-// --- LINKS ATUALIZADOS PARA E-MAIL E SITES ---
-  const dadosDoCarrossel = [
-    {
-      titulo: "ADMINISTRAÇÃO",
-      texto: "Este é o modelo de parceria mais completo, onde a Nobile assume a gestão integral do seu hotel, visando a manutenção do patrimônio e a maximização da rentabilidade.",
-      // Abre o programa de e-mail do usuário com assunto definido
-      link: "mailto:lorena@gruponobile.com.br?subject=Interesse no modelo de Administração" 
-    },
-    {
-      titulo: "FRANQUIA",
-      texto: "Conteúdo em atualização. Estamos preparando informações detalhadas sobre este modelo. Aguarde novidades em breve.",
-      link: "https://www.nobilehoteis.com.br/landingpages/franquias/" 
-    },
-    {
-      titulo: "ASSOCIAÇÃO",
-      texto: "Conteúdo em atualização. Estamos preparando informações detalhadas sobre este modelo. Aguarde novidades em breve.",
-      link: "https://www.nobilehoteis.com.br/landingpages/associacao-2/" 
-    },
-    {
-      titulo: "LICENCIAMENTO",
-      texto: "Conteúdo em atualização. Estamos preparando informações detalhadas sobre este modelo. Aguarde novidades em breve.",
-      // Abre o programa de e-mail do usuário com assunto definido
-      link: "mailto:lorena@gruponobile.com.br?subject=Interesse no modelo de Licenciamento" 
-    }
+  const materials = [
+    { id: 'screen', name: 'Tela Solar 3%', pricePerM2: 120, img: 'https://placehold.co/100x100/eeeeee/747D64?text=Solar' },
+    { id: 'blackout', name: 'Blackout Premium', pricePerM2: 150, img: 'https://placehold.co/100x100/383838/ffffff?text=Blackout' },
+    { id: 'linho', name: 'Linho Sintético', pricePerM2: 180, img: 'https://placehold.co/100x100/A48955/ffffff?text=Linho' }
   ];
 
-  const tituloEl = document.getElementById("titulo-dinamico");
-  const textoEl = document.getElementById("paragrafo-dinamico");
-  const btnEl = document.getElementById("btn-carrossel");
-  const caixaEl = document.getElementById("caixa-texto");
+  const colors = ['#FFFFFF', '#F0F0F0', '#D1D5DB', '#A48955', '#383838'];
 
-  // Função que atualiza o texto e link (Usada no Inicio e na Mudança)
-  function atualizarSlide(index) {
-    if (dadosDoCarrossel[index]) {
-      // Atualiza os dados
-      tituloEl.innerText = dadosDoCarrossel[index].titulo;
-      textoEl.innerHTML = dadosDoCarrossel[index].texto;
-      btnEl.href = dadosDoCarrossel[index].link;
-    }
-  }
+  const calculatePrice = () => {
+    const area = (config.width / 100) * (config.height / 100);
+    const basePrice = config.material ? config.material.pricePerM2 * area : 0;
+    const minPrice = 150; // Minimum price rule
+    return Math.max(basePrice, minPrice);
+  };
 
-  // Inicializa o Swiper
-  const swiper = new Swiper(".mySwiper", {
-    loop: true, centeredSlides: true, slidesPerView: 1.2, spaceBetween: 20, grabCursor: true,
-    autoplay: { delay: 5000, disableOnInteraction: false },
-    navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
-    breakpoints: { 992: { slidesPerView: 1.4 } },
-    on: {
-      // Quando o slide mudar
-      slideChange: function () {
-        const index = this.realIndex;
-        caixaEl.style.opacity = "0"; // Esconde
-        setTimeout(() => {
-          atualizarSlide(index); // Atualiza
-          caixaEl.style.opacity = "1"; // Mostra
-        }, 300);
-      }
-    }
-  });
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        {/* Visualizer (Left) */}
+        <div className="lg:col-span-8 bg-gray-100 rounded-lg p-8 min-h-[500px] flex items-center justify-center relative overflow-hidden">
+            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1595846519845-68e298c2edd8?auto=format&fit=crop&q=80')] bg-cover opacity-20"></div>
+            
+            {/* Window Frame Simulation */}
+            <div className="relative bg-white shadow-2xl border-8 border-gray-200 transition-all duration-500" 
+                 style={{ 
+                   width: `${Math.min(config.width * 2, 600)}px`, 
+                   height: `${Math.min(config.height * 2, 400)}px`,
+                   maxWidth: '90%',
+                   maxHeight: '90%'
+                 }}>
+                {/* The Blind */}
+                <div className="w-full h-full transition-colors duration-300 relative"
+                     style={{ 
+                       backgroundColor: config.color || '#e5e5e5',
+                       backgroundImage: config.material?.id === 'screen' ? 'radial-gradient(#ccc 1px, transparent 1px)' : 'none',
+                       backgroundSize: '4px 4px'
+                     }}>
+                      {/* Pull Chain */}
+                      <div className="absolute right-2 top-0 bottom-0 w-1 bg-gray-300 flex flex-col items-center justify-end pb-4">
+                        <div className="w-3 h-6 rounded-full bg-white border border-gray-300 shadow-sm"></div>
+                      </div>
+                      
+                      <div className="absolute inset-0 flex items-center justify-center">
+                         {!config.material && <span className="text-gray-400 text-sm font-medium bg-white/80 px-4 py-2 rounded">Selecione o material</span>}
+                      </div>
+                </div>
+            </div>
 
-  // *** CORREÇÃO: FORÇA A ATUALIZAÇÃO DO PRIMEIRO SLIDE AO CARREGAR ***
-  atualizarSlide(0);
+            {/* Dimensions Indicator */}
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 px-4 py-2 rounded-full shadow text-xs font-bold text-gray-600 flex gap-4">
+                <span className="flex items-center gap-1"><Ruler size={14}/> L: {config.width}cm</span>
+                <span className="flex items-center gap-1"><Ruler size={14} className="rotate-90"/> A: {config.height}cm</span>
+            </div>
+        </div>
 
-});
-</script>
+        {/* Configurator (Right) */}
+        <div className="lg:col-span-4 bg-white shadow-lg rounded-lg p-6 border border-gray-100">
+          <div className="mb-6 border-b border-gray-100 pb-4">
+            <h2 style={{ color: COLORS.sageGreen }} className="text-xl font-light mb-1">Monte sua Persiana</h2>
+            <p className="text-xs text-gray-500">Personalize cada detalhe da sua janela.</p>
+          </div>
 
-<style>
-.section-representante {
-  display: flex; align-items: center; justify-content: center; padding: 60px 75px; gap: 60px; flex-wrap: wrap; background-color: #263775;
-}
-.representante-texto { flex: 1 1 45%; color: #fff; padding: 50px; }
-.representante-texto h2 { font-size: 30px; font-weight: 800; color: #fff; margin-bottom: 10px; }
-.representante-form {
-  flex: 1 1 45%; background-image: url("https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/form-1.png");
-  background-size: cover; height: auto; padding: 75px;
-}
-.representante-form form { display: flex; flex-direction: column; gap: 10px; }
-.representante-form input[type="text"], 
-.representante-form input[type="email"], 
-.representante-form input[type="tel"] { 
-    padding: 12px; border-radius: 10px; border: 1px solid #ccc; width: 100%; 
-}
-.form-label-pergunta { color: #000; font-weight: bold; margin-top: 15px; margin-bottom: 5px; display: block; text-align: left; }
-.form-radio-group { display: flex; gap: 20px; align-items: center; margin-bottom: 10px; }
-.form-radio-group label { color: #000; font-weight: normal; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+          {/* Stepper */}
+          <div className="flex justify-between mb-8 relative">
+            <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gray-100 -z-10"></div>
+            {[1, 2, 3].map((s) => (
+              <div 
+                key={s} 
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors duration-300 ${step >= s ? 'text-white' : 'bg-gray-200 text-gray-500'}`}
+                style={{ backgroundColor: step >= s ? COLORS.sageGreen : undefined }}
+              >
+                {s}
+              </div>
+            ))}
+          </div>
 
-.btn-enviar { background-color: #1b3b6f; color: #fff; border: none; padding: 15px; border-radius: 50px; cursor: pointer; font-weight: bold; margin-top: 15px; font-size: 16px; }
-.btn-enviar:hover { background-color: #2a7fa1; transform: scale(1.02); transition: 0.3s; }
+          {/* Steps Content */}
+          <div className="min-h-[250px]">
+            {step === 1 && (
+              <div className="animate-fade-in">
+                <h3 className="font-bold text-gray-700 mb-4 flex items-center gap-2"><Ruler size={18}/> Medidas (cm)</h3>
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label className="text-xs font-bold text-gray-500 uppercase block mb-1">Largura</label>
+                    <input 
+                      type="number" 
+                      value={config.width} 
+                      onChange={(e) => setConfig({...config, width: Number(e.target.value)})}
+                      className="w-full border border-gray-300 rounded p-3 text-center font-mono text-lg focus:border-sage-500 outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold text-gray-500 uppercase block mb-1">Altura</label>
+                    <input 
+                      type="number" 
+                      value={config.height} 
+                      onChange={(e) => setConfig({...config, height: Number(e.target.value)})}
+                      className="w-full border border-gray-300 rounded p-3 text-center font-mono text-lg focus:border-sage-500 outline-none"
+                    />
+                  </div>
+                </div>
+                <div className="bg-pale-green/30 p-3 rounded text-xs text-gray-600 border border-gray-100">
+                    <span className="font-bold block mb-1">Dica do Especialista:</span>
+                    Adicione 15cm para cada lado da janela para um melhor acabamento.
+                </div>
+              </div>
+            )}
 
-@media (max-width: 900px) {
-  .section-representante { flex-direction: column; padding: 60px 20px; }
-  .representante-form { width: 100%; height: auto; padding: 40px; }
-}
+            {step === 2 && (
+              <div className="animate-fade-in">
+                <h3 className="font-bold text-gray-700 mb-4 flex items-center gap-2"><PenTool size={18}/> Material & Cor</h3>
+                <div className="space-y-3 mb-6">
+                  {materials.map(mat => (
+                    <div 
+                        key={mat.id}
+                        onClick={() => setConfig({...config, material: mat})}
+                        className={`flex items-center gap-4 p-3 rounded border cursor-pointer transition-all ${config.material?.id === mat.id ? 'border-sage-500 bg-gray-50 ring-1 ring-sage-500' : 'border-gray-200 hover:border-gray-300'}`}
+                    >
+                        <div className="w-12 h-12 rounded bg-gray-200 bg-cover" style={{ backgroundImage: `url(${mat.img})` }}></div>
+                        <div className="flex-1">
+                            <h4 className="font-bold text-sm text-gray-800">{mat.name}</h4>
+                            <p className="text-xs text-gray-500">A partir de R$ {mat.pricePerM2}/m²</p>
+                        </div>
+                    </div>
+                  ))}
+                </div>
+                
+                {config.material && (
+                    <div>
+                        <label className="text-xs font-bold text-gray-500 uppercase block mb-2">Selecione a tonalidade:</label>
+                        <div className="flex gap-3">
+                            {colors.map(c => (
+                                <div 
+                                    key={c}
+                                    onClick={() => setConfig({...config, color: c})}
+                                    className={`w-8 h-8 rounded-full shadow-sm cursor-pointer border-2 ${config.color === c ? 'border-sage-500 scale-110' : 'border-transparent hover:scale-105'}`}
+                                    style={{ backgroundColor: c }}
+                                ></div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+              </div>
+            )}
 
-.static-logos-container { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin: 60px auto; max-width: 1100px; }
-.static-logos-container img { max-width: 160px; transition: transform 0.3s; }
-.static-logos-container img:hover { transform: scale(1.08); }
+            {step === 3 && (
+               <div className="animate-fade-in">
+                 <h3 className="font-bold text-gray-700 mb-4">Resumo do Projeto</h3>
+                 <div className="bg-gray-50 p-4 rounded border border-gray-100 mb-4 text-sm">
+                    <div className="flex justify-between mb-2">
+                        <span className="text-gray-500">Dimensões:</span>
+                        <span className="font-bold">{config.width}cm x {config.height}cm</span>
+                    </div>
+                    <div className="flex justify-between mb-2">
+                        <span className="text-gray-500">Material:</span>
+                        <span className="font-bold">{config.material?.name || 'Não selecionado'}</span>
+                    </div>
+                    <div className="flex justify-between mb-2">
+                        <span className="text-gray-500">Instalação:</span>
+                        <span className="font-bold capitalize">{config.mount}</span>
+                    </div>
+                    <div className="border-t border-gray-200 my-3"></div>
+                    <div className="flex justify-between items-center">
+                        <span className="text-gray-800 font-bold">Total Estimado:</span>
+                        <span style={{ color: COLORS.gold }} className="text-xl font-bold">
+                            R$ {calculatePrice().toFixed(2)}
+                        </span>
+                    </div>
+                 </div>
+                 <div className="text-xs text-gray-400 text-center mb-4">
+                    Prazo de produção: 7 a 10 dias úteis
+                 </div>
+               </div>
+            )}
+          </div>
 
-.footer-container { display: flex; justify-content: space-between; flex-wrap: wrap; max-width: 1200px; margin: auto; padding: 60px 20px; background: #f5f5f5; color: #333; }
-.footer-box h3 { font-size: 22px; font-weight: bold; margin-bottom: 20px; }
-.footer-box ul { list-style: none; padding: 0; }
-.footer-box ul li { margin-bottom: 10px; }
-.footer-box a { text-decoration: none; color: #333; }
-</style>
+          {/* Navigation Buttons */}
+          <div className="flex gap-3 mt-6 pt-4 border-t border-gray-100">
+             {step > 1 && (
+                <button 
+                    onClick={() => setStep(step - 1)}
+                    className="flex-1 py-3 border border-gray-300 rounded text-gray-600 font-bold text-sm hover:bg-gray-50 transition"
+                >
+                    Voltar
+                </button>
+             )}
+             {step < 3 ? (
+                <button 
+                    onClick={() => setStep(step + 1)}
+                    disabled={step === 2 && !config.material}
+                    style={{ backgroundColor: step === 2 && !config.material ? '#ccc' : COLORS.sageGreen }}
+                    className="flex-1 py-3 rounded text-white font-bold text-sm hover:opacity-90 transition shadow-md"
+                >
+                    Continuar
+                </button>
+             ) : (
+                <button 
+                    onClick={() => onAddToCart({
+                        id: Date.now(),
+                        name: `Persiana Personalizada - ${config.material.name}`,
+                        price: calculatePrice(),
+                        image: config.material.img
+                    })}
+                    style={{ backgroundColor: COLORS.gold }}
+                    className="flex-1 py-3 rounded text-white font-bold text-sm hover:bg-yellow-700 transition shadow-md flex justify-center items-center gap-2"
+                >
+                    <ShoppingCart size={18} />
+                    Adicionar ao Carrinho
+                </button>
+             )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-<div class="section-representante">
-  <div class="representante-texto">
-    <h2>Quer ser um representante da Nobile Hotels & Resorts?</h2>
-    <p>Preencha as informações ao lado e entraremos em contato.</p>
-    <img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Logo_em-alta_branco_NBL-1.png" width="180" alt="Logo">
-  </div>
-  
-  <div class="representante-form">
-    <form action="#" method="post">
-      <input type="text" name="nome" placeholder="Nome Completo" required>
-      <input type="email" name="email" placeholder="E-mail Corporativo" required>
-      <input type="tel" name="telefone" placeholder="Telefone / WhatsApp" required>
-      <input type="text" name="cidade" placeholder="Cidade e Estado de Atuação" required>
+// 5. MAIN APP
+const CurtainsCornerApp = () => {
+  const [currentPage, setCurrentPage] = useState('home');
+  const [cart, setCart] = useState([]);
+
+  const addToCart = (product) => {
+    setCart([...cart, product]);
+    alert(`${product.name} adicionado ao carrinho!`);
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col font-sans text-gray-800 bg-white">
+      <Header cartCount={cart.length} onNavigate={setCurrentPage} />
       
-      <label class="form-label-pergunta">Você já atua no segmento hoteleiro ou imobiliário?</label>
-      <div class="form-radio-group">
-          <label><input type="radio" name="segmento" value="Sim"> Sim</label>
-          <label><input type="radio" name="segmento" value="Não"> Não</label>
-      </div>
+      <main className="flex-1">
+        {currentPage === 'home' && (
+          <>
+            <Hero />
+            
+            {/* Features Bar */}
+            <div className="bg-white border-b border-gray-100 py-6">
+                <div className="max-w-7xl mx-auto px-4 flex flex-wrap justify-center md:justify-between gap-6">
+                    <div className="flex items-center gap-3">
+                        <Truck style={{ color: COLORS.sageGreen }} size={28} />
+                        <div>
+                            <p className="text-sm font-bold text-gray-700">Frete Grátis</p>
+                            <p className="text-xs text-gray-500">Para compras acima de R$ 500</p>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <CreditCard style={{ color: COLORS.sageGreen }} size={28} />
+                        <div>
+                            <p className="text-sm font-bold text-gray-700">Até 10x Sem Juros</p>
+                            <p className="text-xs text-gray-500">Nos cartões de crédito</p>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <ShieldCheck style={{ color: COLORS.sageGreen }} size={28} />
+                        <div>
+                            <p className="text-sm font-bold text-gray-700">Garantia de 2 Anos</p>
+                            <p className="text-xs text-gray-500">Em mecanismos e tecidos</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-      <label class="form-label-pergunta">Você possui carteira de hotéis, empreendimentos ou investidores ativos?</label>
-      <div class="form-radio-group">
-          <label><input type="radio" name="carteira" value="Sim"> Sim</label>
-          <label><input type="radio" name="carteira" value="Não"> Não</label>
-      </div>
+            {/* Custom Builder Banner */}
+            <section className="py-12 bg-white">
+                <div className="max-w-7xl mx-auto px-4">
+                    <div 
+                        onClick={() => setCurrentPage('build')}
+                        className="rounded-lg overflow-hidden relative cursor-pointer group h-[200px] md:h-[280px]"
+                    >
+                        <img src="https://images.unsplash.com/photo-1594040226829-71248af93329?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" className="w-full h-full object-cover"/>
+                        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors flex flex-col items-center justify-center text-center">
+                            <h2 className="text-3xl md:text-5xl text-white font-light mb-4">Monte sua Persiana</h2>
+                            <p className="text-gray-200 mb-6 font-medium">Personalize medidas, tecidos e cores em 3 passos simples</p>
+                            <button className="bg-white text-gray-800 px-8 py-3 rounded font-bold uppercase tracking-wider text-xs hover:bg-gray-100 transition">
+                                Começar Agora
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-      <button type="submit" class="btn-enviar">Quero ser um Representante Nobile</button>
-    </form>
-  </div>
-</div>
+            {/* Product Grid */}
+            <section className="py-8 bg-gray-50">
+              <div className="max-w-7xl mx-auto px-4">
+                <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-2xl font-light text-gray-800">
+                        <span className="font-bold border-b-2 pb-1" style={{ borderColor: COLORS.sageGreen }}>Destaques</span> da Semana
+                    </h2>
+                    <button className="text-xs font-bold uppercase text-gray-500 hover:text-sage-600 flex items-center gap-1">
+                        Ver Todos <ChevronRight size={14} />
+                    </button>
+                </div>
+                
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {MOCK_PRODUCTS.map(product => (
+                    <ProductCard key={product.id} product={product} onAdd={addToCart} />
+                  ))}
+                </div>
+              </div>
+            </section>
 
-<div class="static-logos-container">
-  <div><img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Nobile-Stays.png"></div>
-  <div><img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Nobile-Resorts.png"></div>
-  <div><img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Nobile-inn.png"></div>
-  <div><img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Nobile-Hotels_.png"></div>
-</div>
+            {/* About Section (Brand Identity) */}
+            <section className="py-16 bg-white">
+                <div className="max-w-4xl mx-auto text-center px-4">
+                    <h3 style={{ color: COLORS.gold }} className="text-sm font-bold tracking-[0.2em] uppercase mb-4">Sobre a Marca</h3>
+                    <h2 className="text-3xl font-light text-gray-800 mb-6">"Cada cortina carrega a leveza do toque e o calor de quem habita."</h2>
+                    <p className="text-gray-500 leading-relaxed">
+                        Somos a marca que transforma janelas em experiências sensoriais. Unimos a elegância do feito à mão com a praticidade do design contemporâneo. Nosso arquétipo é o cuidador, sempre prontos para auxiliar você a criar o ambiente perfeito.
+                    </p>
+                </div>
+            </section>
+          </>
+        )}
 
-<div style="background:#f5f5f5;">
-  <div class="footer-container">
-    <div class="footer-box">
-      <h3>Redes Sociais</h3>
-      <p>Instagram | Facebook | LinkedIn</p>
+        {currentPage === 'build' && (
+            <div className="animate-fade-in pb-12">
+                 <div className="bg-gray-50 py-4 mb-8">
+                    <div className="max-w-7xl mx-auto px-4 flex items-center gap-2 text-xs text-gray-500">
+                        <span className="cursor-pointer hover:underline" onClick={() => setCurrentPage('home')}>Home</span>
+                        <ChevronRight size={12} />
+                        <span className="font-bold text-gray-700">Monte sua Persiana</span>
+                    </div>
+                 </div>
+                <CustomBuilder onAddToCart={addToCart} />
+            </div>
+        )}
+
+        {currentPage === 'cart' && (
+            <div className="max-w-4xl mx-auto px-4 py-12">
+                 <h2 className="text-2xl font-light mb-8">Seu Carrinho</h2>
+                 {cart.length === 0 ? (
+                     <div className="text-center py-12 bg-gray-50 rounded">
+                         <ShoppingCart size={48} className="mx-auto text-gray-300 mb-4" />
+                         <p className="text-gray-500">Seu carrinho está vazio.</p>
+                         <button onClick={() => setCurrentPage('home')} className="mt-4 text-sage-600 font-bold underline">Voltar para a loja</button>
+                     </div>
+                 ) : (
+                     <div className="space-y-4">
+                         {cart.map((item, idx) => (
+                             <div key={idx} className="flex items-center gap-4 border p-4 rounded bg-white">
+                                 <div className="w-20 h-20 bg-gray-200 rounded overflow-hidden">
+                                     {item.image && <img src={item.image} alt={item.name} className="w-full h-full object-cover" />}
+                                 </div>
+                                 <div className="flex-1">
+                                     <h3 className="font-bold text-gray-800">{item.name}</h3>
+                                     <p className="text-xs text-gray-500">Ref: {item.id}</p>
+                                 </div>
+                                 <div style={{ color: COLORS.gold }} className="font-bold text-lg">
+                                     R$ {item.price.toFixed(2)}
+                                 </div>
+                                 <button onClick={() => {
+                                     const newCart = [...cart];
+                                     newCart.splice(idx, 1);
+                                     setCart(newCart);
+                                 }} className="text-gray-400 hover:text-red-500">
+                                     <X size={20} />
+                                 </button>
+                             </div>
+                         ))}
+                         <div className="flex justify-between items-center pt-6 border-t mt-6">
+                             <span className="text-xl font-light">Total</span>
+                             <span style={{ color: COLORS.sageGreen }} className="text-2xl font-bold">
+                                 R$ {cart.reduce((a, b) => a + b.price, 0).toFixed(2)}
+                             </span>
+                         </div>
+                         <button style={{ backgroundColor: COLORS.sageGreen }} className="w-full py-4 text-white font-bold rounded mt-4 uppercase tracking-wider hover:opacity-90">
+                             Finalizar Compra
+                         </button>
+                     </div>
+                 )}
+            </div>
+        )}
+      </main>
+
+      {/* FOOTER */}
+      <footer style={{ backgroundColor: COLORS.darkGrey }} className="text-gray-400 pt-16 pb-8 text-sm">
+        <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+            <div>
+                <h4 className="text-white font-bold uppercase tracking-wider mb-4">Institucional</h4>
+                <ul className="space-y-2">
+                    <li className="hover:text-white cursor-pointer">Sobre a Curtains Corner</li>
+                    <li className="hover:text-white cursor-pointer">Política de Privacidade</li>
+                    <li className="hover:text-white cursor-pointer">Trabalhe Conosco</li>
+                    <li className="hover:text-white cursor-pointer">Seja um Parceiro</li>
+                </ul>
+            </div>
+            <div>
+                <h4 className="text-white font-bold uppercase tracking-wider mb-4">Ajuda & Suporte</h4>
+                <ul className="space-y-2">
+                    <li className="hover:text-white cursor-pointer">Trocas e Devoluções</li>
+                    <li className="hover:text-white cursor-pointer">Prazos de Entrega</li>
+                    <li className="hover:text-white cursor-pointer">Como Medir sua Janela</li>
+                    <li className="hover:text-white cursor-pointer">Central de Atendimento</li>
+                </ul>
+            </div>
+            <div>
+                <h4 className="text-white font-bold uppercase tracking-wider mb-4">Formas de Pagamento</h4>
+                <div className="flex gap-2 flex-wrap">
+                    <div className="w-10 h-6 bg-white rounded opacity-80"></div>
+                    <div className="w-10 h-6 bg-white rounded opacity-80"></div>
+                    <div className="w-10 h-6 bg-white rounded opacity-80"></div>
+                    <div className="w-10 h-6 bg-white rounded opacity-80"></div>
+                </div>
+            </div>
+            <div>
+                <h4 className="text-white font-bold uppercase tracking-wider mb-4">Atendimento</h4>
+                <p className="mb-2">Seg a Sex: 08h às 18h</p>
+                <p className="mb-4">Sáb: 08h às 12h</p>
+                <div className="flex gap-4 mt-4">
+                    <div className="w-8 h-8 rounded-full bg-gray-700 hover:bg-sage-600 cursor-pointer transition flex items-center justify-center text-white">IG</div>
+                    <div className="w-8 h-8 rounded-full bg-gray-700 hover:bg-sage-600 cursor-pointer transition flex items-center justify-center text-white">FB</div>
+                    <div className="w-8 h-8 rounded-full bg-gray-700 hover:bg-sage-600 cursor-pointer transition flex items-center justify-center text-white">YT</div>
+                </div>
+            </div>
+        </div>
+        <div className="border-t border-gray-700 pt-8 text-center text-xs">
+            <p>&copy; 2024 Curtains Corner By Deux. Todos os direitos reservados.</p>
+            <p className="mt-2 text-gray-600">CNPJ: 00.000.000/0000-00 | Rua Exemplo, 123 - São Paulo/SP</p>
+        </div>
+      </footer>
     </div>
-    <div class="footer-box">
-      <h3>Links Úteis</h3>
-      <ul>
-        <li><a href="#">Política de Privacidade</a></li>
-        <li><a href="#">Fale Conosco</a></li>
-      </ul>
-    </div>
-  </div>
-</div>
+  );
+};
+
+export default CurtainsCornerApp;
