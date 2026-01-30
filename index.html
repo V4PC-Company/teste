@@ -503,7 +503,7 @@
             const k_nutricao = leads.filter(l => l.statusK.includes("NUTRIÇÃO") || l.status.includes("NUTRIÇÃO")).length;
 
             // 3. Atualiza o Gráfico de Torta (Removido Sem Resposta, Add Congelado/Nutrição)
-            chartQualidade.data.datasets[0].data = [k_ativos, k_qualificados, k_agendados, k_congelado, k_nutricao, k_inativos];
+            chartQualidade.data.datasets[0].data = [k_ativos, k_qualificados, k_congelado, k_nutricao, k_inativos];
             chartQualidade.update();
 
             const bant4_total = leads.filter(l => l.status.includes('BANT') || l.status.includes('QUALIFICADO')).length;
@@ -521,9 +521,10 @@
             chartReuniao.data.datasets[0].data = [liveStats.presente, liveStats.agendado, liveStats.ausente];
             chartReuniao.update();
 
-            // GRÁFICO 2 (Funil): Removido Sem Resp, Adicionado Congelado e Nutrição
+            // GRÁFICO 2 (Funil): Sem Resposta (Primeiro) + Congelado + Nutrição
             const contatado = leads.filter(l => l.status.includes('CONTATADO')).length;
-            chartLive.data.datasets[0].data = [contatado, bant4_total, k_congelado, k_nutricao, liveStats.presente];
+            const semResp = leads.filter(l => l.status.includes('SEM RESPOSTA')).length;
+            chartLive.data.datasets[0].data = [semResp, contatado, bant4_total, k_congelado, k_nutricao, liveStats.presente];
             chartLive.update();
 
             const dates = {};
@@ -570,10 +571,10 @@
             chartQualidade = new Chart(document.getElementById('chartQualidade'), {
                 type: 'pie', 
                 data: { 
-                    labels: ['Ativos', 'Qualificados', 'Agendados', 'Congelado', 'Nutrição', 'Inativos'], 
+                    labels: ['Ativos', 'Qualificados', 'Congelado', 'Nutrição', 'Inativos'], 
                     datasets: [{ 
-                        data: [0, 0, 0, 0, 0, 0], 
-                        backgroundColor: ['#ff1f2d', '#00c853', '#0D47A1', '#E1BEE7', '#B2DFDB', '#333333'], 
+                        data: [0, 0, 0, 0, 0], 
+                        backgroundColor: ['#ff1f2d', '#00c853', '#E1BEE7', '#B2DFDB', '#333333'], 
                         borderWidth: 0 
                     }] 
                 },
@@ -599,10 +600,10 @@
                 type: 'bar', 
                 indexAxis: 'y', 
                 data: { 
-                    labels: ['CONTATADO', 'BANT4', 'CONGELADO', 'NUTRIÇÃO', 'PARTICIPOU'], 
+                    labels: ['SEM RESP', 'CONTATADO', 'BANT4', 'CONGELADO', 'NUTRIÇÃO', 'PARTICIPOU'], 
                     datasets: [{ 
-                        data: [0,0,0,0,0], 
-                        backgroundColor: ['#ffd700', '#00c853', '#E1BEE7', '#B2DFDB', '#00c853'], 
+                        data: [0,0,0,0,0,0], 
+                        backgroundColor: ['#ff1f2d', '#ffd700', '#00c853', '#E1BEE7', '#B2DFDB', '#00c853'], 
                         borderRadius: 4 
                     }] 
                 }, 
