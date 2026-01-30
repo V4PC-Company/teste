@@ -1,664 +1,625 @@
-import React, { useState, useEffect } from 'react';
-import { ShoppingCart, Search, Menu, User, Heart, ChevronDown, ChevronRight, X, Ruler, PenTool, Truck, ShieldCheck, CreditCard } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V4 | CVC Dashboard (2026+)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/webp;base64,UklGRp4DAABXRUJQVlA4IJIDAADQGACdASpQAFAAPpE6mUgloyKhJ7VeuLASCWwAwNm0/pPQibU69+Sn4wdQXwh4R/HDqpjr9kv3z7wPeB/lfYf5gH6Xf5H+UdZ/zAftn+wHvE/gB2AH9u6lz0AP1A9Kj91fhX/c39jPaWcru3jov0zhW9PU98+byajkjDFAbXoNu8wmuxYjZlGeKQRt6t6fm8telKsGsCGRAvJItQjGLYBsYC7Clke1NwUIqiVP6MLX4s32uk0XiwOYRmQaWFH51pWyxrWqOw41j0D8j5Hui0AA/v55tLcV4Y6mmmK/BuN3V6PZpPf1qoPqLCQHdSnbtv2a9czILQkoWChlU+W8jk1hh1CG1bBwQm11hFcnUyz8tmcIGUOlm5/KZmKX5S/yFMpIF5Ks1tNhOKyBsyf8/NLis71L+0q1eDdBMCRjSEhE3lo5yoSWIy+sIfH2WWfJbXLjN9WHWnDdJ9ZG6VGisCNgQSdmtkCcEhKJd8rUabrLeYRFMk0YJxK0NSX/QVYd62GykOxoZgLBcpsTgvQnyguq2JftBApkXdP/9fw3BmHgVrDkA6JnG3IyAXjKYvUx+r1Aw79CnP31UYIVw6zH9ip8fkklQaSNLi7fNaNG0BB7PK+qg/5C5JVRlJQCTov8dNEsPOyyNy2Svs1hDehoaXUo0POh5WrBDEYFZcZG1JoDVe1fprQvvr/RctYH9vfJHgPnM8brHCl96vcXqQcgzMLAbiajQr2ZIL5YuUXoRNyOBAuj4Ng2QN5rSQeQaWG7Kkj7iqk8yh80M0wrqAgtP7fyHFt+zgfx1zFB0BRjcdDA6oPmA1MytL3G2NGf9iKM30uVwGcvh2/bYQMbYIz/G211wIPkUrMDArQFNyXeUv8/WoMcN5YmWrphrUpOd2qfuAXZrse5nUBVhHpfua2L1+kPbvAFvz85aR3eywiSx/S82jx3n6Nt1WGuVbo7ZimNVLSiW0UEv6PxQQr0ztwCnlx8A5GoB+a8MCWRWziiXbiWPagExpf8xPxpy40AnTZT4xUJMVSA3kA1HgbS9Agu3IC+ric/Aj26/Yyv27flEDzMxM+TlvfBD8oi498PFYQH4+ric7bP27nwRcb8OeBLTIAeTW4lRpPVb8M2oCQDafZxS2gqwq6/yVN5+/5p9OA4Qi5uGbU5KBIMm+Cf109IfwLfrn0DrfzxjgvxoyAgfGe0bsB8PGWQF+dBAf9t6bLdCEAAAA==" type="image/png">
 
-// --- BRAND CONSTANTS & DATA ---
-const COLORS = {
-  white: '#FFFFFF',
-  paleGreen: '#ECFAD2',
-  sageGreen: '#747D64',
-  gold: '#A48955',
-  darkGrey: '#383838',
-  lightGrey: '#f5f5f5'
-};
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-const MOCK_PRODUCTS = [
-  { id: 1, name: 'Tecido Linho Premium', category: 'Tecidos', price: 89.90, oldPrice: 120.00, image: 'https://placehold.co/300x300/ECFAD2/747D64?text=Linho+Premium', rating: 5 },
-  { id: 2, name: 'Kit Persiana Rolo Blackout', category: 'Kits Prontos', price: 249.90, oldPrice: 350.00, image: 'https://placehold.co/300x300/747D64/FFFFFF?text=Rolo+Blackout', rating: 4 },
-  { id: 3, name: 'Tecido Voil Transparente', category: 'Tecidos', price: 45.90, oldPrice: 60.00, image: 'https://placehold.co/300x300/FFFFFF/A48955?text=Voil+Leve', rating: 5 },
-  { id: 4, name: 'Motor para Automação', category: 'Acessórios', price: 599.90, oldPrice: 750.00, image: 'https://placehold.co/300x300/383838/FFFFFF?text=Motor+Smart', rating: 5 },
-  { id: 5, name: 'Trilho Suíço Duplo 2m', category: 'Acessórios', price: 129.90, oldPrice: 159.90, image: 'https://placehold.co/300x300/e0e0e0/383838?text=Trilho+Duplo', rating: 4 },
-  { id: 6, name: 'Persiana Romana Rústica', category: 'Kits Prontos', price: 389.90, oldPrice: 499.00, image: 'https://placehold.co/300x300/A48955/FFFFFF?text=Romana+Rustica', rating: 5 },
-  { id: 7, name: 'Veludo Molhado Royal', category: 'Tecidos', price: 110.00, oldPrice: 140.00, image: 'https://placehold.co/300x300/383838/A48955?text=Veludo+Royal', rating: 4 },
-  { id: 8, name: 'Abraçadeira Magnética', category: 'Acessórios', price: 29.90, oldPrice: 49.90, image: 'https://placehold.co/300x300/A48955/FFFFFF?text=Abracadeira', rating: 3 },
-];
+    <style>
+        /* --- VISUAL DARK NEON PREMIUM (Red/Black V4 Theme) --- */
+        :root {
+            --bg-main: #0a0a0a; 
+            --bg-secondary: #141414; 
+            --bg-tertiary: #1f1f1f; 
+            --text-bright: #ffffff;
+            --text-muted: #8c8c8c;
+            --v4-neon-red: #ff1f2d; 
+            --v4-dark-red: #a30009;
+            --cvc-neon-yellow: #ffd700;
+            --status-green: #00c853;
+            --status-blue-dark: #0D47A1; 
+        }
 
-const DEPARTMENTS = [
-  'Tecidos por Metro', 'Persianas Rolo', 'Persianas Romanas', 'Trilhos e Varões', 'Motorização', 'Acessórios', 'Outlet'
-];
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-// --- COMPONENTS ---
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-bright);
+            height: 100vh;
+            overflow: hidden;
+        }
 
-// 1. HEADER (Inspired by Pichau structure but branded)
-const Header = ({ cartCount, onNavigate, onSearch }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+        /* LOGIN */
+        #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-main); display: flex; justify-content: center; align-items: center; z-index: 9999; background-image: radial-gradient(circle at center, rgba(255,31,45,0.1) 0%, rgba(10,10,10,1) 70%); transition: opacity 0.5s ease; }
+        .login-box { background: var(--bg-secondary); padding: 40px; border-radius: 24px; width: 450px; text-align: center; border: 1px solid #2a2a2a; box-shadow: 0 0 40px rgba(255, 31, 45, 0.15); display: flex; flex-direction: column; align-items: center; }
+        .login-input { width: 100%; padding: 15px; margin-bottom: 20px; background: var(--bg-main); border: 1px solid #333; border-radius: 12px; color: var(--text-bright); outline: none; }
+        .login-btn { width: 100%; padding: 15px; background: linear-gradient(90deg, var(--v4-dark-red), var(--v4-neon-red)); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        .login-btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(255, 31, 45, 0.5); }
 
-  return (
-    <header className="w-full shadow-md sticky top-0 z-50">
-      {/* Top Bar - Dark Brand Color */}
-      <div style={{ backgroundColor: COLORS.darkGrey }} className="text-white text-xs py-2 px-4 flex justify-between items-center hidden md:flex">
-        <div className="flex gap-4">
-          <span>Fale Conosco: (11) 9999-9999</span>
-          <span>E-mail: contato@curtainscorner.com</span>
-        </div>
-        <div className="flex gap-4">
-          <span className="cursor-pointer hover:text-gray-300">Rastrear Pedido</span>
-          <span className="cursor-pointer hover:text-gray-300">Seja um Parceiro (Arquitetos)</span>
-        </div>
-      </div>
-
-      {/* Main Header */}
-      <div className="bg-white py-4 px-4 md:px-8 border-b border-gray-100">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-          
-          {/* Logo Area */}
-          <div 
-            className="flex flex-col items-center cursor-pointer min-w-[120px]"
-            onClick={() => onNavigate('home')}
-          >
-            <h1 style={{ color: COLORS.darkGrey }} className="font-sans text-2xl font-light tracking-widest leading-none">CURTAINS</h1>
-            <h2 style={{ color: COLORS.gold }} className="font-sans text-sm font-bold tracking-[0.2em]">CORNER</h2>
-            <span style={{ color: COLORS.sageGreen }} className="text-[10px] tracking-widest">BY DEUX</span>
-          </div>
-
-          {/* Department Trigger & Search (Pichau Style) */}
-          <div className="hidden md:flex items-center flex-1 max-w-3xl gap-2">
-            <button 
-              className="flex items-center gap-2 px-4 py-3 rounded text-white font-semibold transition-colors"
-              style={{ backgroundColor: COLORS.sageGreen }}
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              <Menu size={20} />
-              <span className="uppercase text-sm">Departamentos</span>
-            </button>
-
-            <div className="flex-1 relative">
-              <input 
-                type="text" 
-                placeholder="O que você procura para suas janelas?" 
-                className="w-full pl-4 pr-10 py-3 bg-gray-100 rounded border border-transparent focus:border-sage-500 focus:bg-white focus:outline-none transition-all text-sm"
-              />
-              <Search className="absolute right-3 top-3 text-gray-400 cursor-pointer" size={20} />
-            </div>
-          </div>
-
-          {/* User Actions */}
-          <div className="flex items-center gap-6 text-gray-600">
-            <div className="flex flex-col items-center cursor-pointer hover:text-sage-700 transition hidden sm:flex">
-              <User size={24} />
-              <span className="text-[10px] font-bold uppercase mt-1">Entrar</span>
-            </div>
-            <div className="flex flex-col items-center cursor-pointer hover:text-sage-700 transition hidden sm:flex">
-              <Heart size={24} />
-              <span className="text-[10px] font-bold uppercase mt-1">Favoritos</span>
-            </div>
-            <div 
-              className="flex flex-col items-center cursor-pointer hover:text-sage-700 transition relative"
-              onClick={() => onNavigate('cart')}
-            >
-              <div className="relative">
-                <ShoppingCart size={24} />
-                {cartCount > 0 && (
-                  <span style={{ backgroundColor: COLORS.gold }} className="absolute -top-2 -right-2 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
-                    {cartCount}
-                  </span>
-                )}
-              </div>
-              <span className="text-[10px] font-bold uppercase mt-1">Carrinho</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Search & Menu (Visible only on mobile) */}
-      <div className="md:hidden p-2 bg-white border-b border-gray-100">
-         <div className="relative">
-            <input 
-              type="text" 
-              placeholder="Buscar produtos..." 
-              className="w-full pl-4 pr-10 py-2 bg-gray-100 rounded text-sm"
-            />
-            <Search className="absolute right-3 top-2 text-gray-400" size={18} />
-          </div>
-      </div>
-
-      {/* Department Dropdown (Overlay) */}
-      {isMenuOpen && (
-        <div className="absolute top-full left-0 w-64 bg-white shadow-xl border-t border-gray-100 z-40 hidden md:block ml-[max(2rem,calc((100vw-80rem)/2))]">
-          <ul className="py-2">
-            {DEPARTMENTS.map((dept, idx) => (
-              <li key={idx} className="px-6 py-3 hover:bg-gray-50 text-sm text-gray-700 font-medium cursor-pointer flex justify-between items-center group">
-                {dept}
-                <ChevronRight size={14} className="text-gray-300 group-hover:text-sage-500" />
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </header>
-  );
-};
-
-// 2. HERO SECTION
-const Hero = () => {
-  return (
-    <div className="w-full bg-gray-100 relative h-[300px] md:h-[450px] overflow-hidden group">
-      <img 
-        src="https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
-        alt="Luxury Interior" 
-        className="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
-      />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent flex items-center px-4 md:px-16">
-        <div className="max-w-xl text-white">
-          <span style={{ color: COLORS.paleGreen }} className="text-sm font-bold tracking-widest uppercase mb-2 block">
-            Nova Coleção
-          </span>
-          <h2 className="text-4xl md:text-6xl font-light mb-6 leading-tight">
-            Elegância que <br/> <span className="font-serif italic">veste janelas</span>
-          </h2>
-          <p className="mb-8 text-gray-200 text-sm md:text-base max-w-md">
-            Transforme sua casa em uma experiência sensorial. Tecidos premium e confecção sob medida.
-          </p>
-          <button 
-            style={{ backgroundColor: COLORS.gold }} 
-            className="px-8 py-3 rounded text-white font-bold uppercase text-sm tracking-wider hover:bg-yellow-700 transition"
-          >
-            Ver Ofertas
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// 3. PRODUCT CARD
-const ProductCard = ({ product, onAdd }) => {
-  return (
-    <div className="bg-white border border-gray-100 rounded-lg overflow-hidden hover:shadow-lg transition-shadow group flex flex-col h-full">
-      <div className="relative h-64 overflow-hidden bg-gray-100">
-        <img 
-          src={product.image} 
-          alt={product.name} 
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-        />
-        <div className="absolute top-2 right-2 bg-white/90 rounded-full p-1.5 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-          <Heart size={18} className="text-gray-400 hover:text-red-500" />
-        </div>
-        {product.id === 1 && (
-          <div style={{ backgroundColor: COLORS.sageGreen }} className="absolute top-2 left-2 text-white text-[10px] font-bold px-2 py-1 rounded-sm uppercase">
-            Destaque
-          </div>
-        )}
-      </div>
-      
-      <div className="p-4 flex flex-col flex-1">
-        <span className="text-[10px] text-gray-400 uppercase tracking-wider mb-1">{product.category}</span>
-        <h3 className="text-gray-700 font-medium text-sm mb-2 line-clamp-2 min-h-[40px] leading-snug">
-          {product.name}
-        </h3>
+        /* DASHBOARD */
+        #dashboard-container { display: none; height: 100vh; }
+        .sidebar { width: 280px; background: var(--bg-secondary); padding: 30px; display: flex; flex-direction: column; border-right: 1px solid #222; }
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; background: radial-gradient(circle at top right, rgba(20,20,20,1) 0%, rgba(10,10,10,1) 100%); }
         
-        <div className="mt-auto">
-            <div className="flex items-center gap-2 mb-1">
-                <span className="text-xs text-gray-400 line-through">R$ {product.oldPrice.toFixed(2)}</span>
-                <span style={{ backgroundColor: COLORS.paleGreen, color: COLORS.sageGreen }} className="text-[10px] font-bold px-1.5 rounded">
-                    -{(100 - (product.price / product.oldPrice * 100)).toFixed(0)}%
-                </span>
-            </div>
-            <div style={{ color: COLORS.gold }} className="text-xl font-bold mb-1">
-            R$ {product.price.toFixed(2)}
-            </div>
-            <div className="text-[10px] text-gray-500 mb-3">
-            à vista no PIX
-            </div>
-            
-            <button 
-            onClick={() => onAdd(product)}
-            style={{ borderColor: COLORS.sageGreen, color: COLORS.sageGreen }}
-            className="w-full border py-2 rounded text-xs font-bold uppercase hover:bg-sage-50 transition-colors flex items-center justify-center gap-2 group-hover:bg-sage-600 group-hover:text-white"
-            >
-            <ShoppingCart size={14} />
-            Comprar
-            </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// 4. CUSTOM BUILDER (Monte sua Persiana)
-const CustomBuilder = ({ onAddToCart }) => {
-  const [step, setStep] = useState(1);
-  const [config, setConfig] = useState({
-    width: 100,
-    height: 100,
-    material: null,
-    color: null,
-    mount: 'teto'
-  });
-
-  const materials = [
-    { id: 'screen', name: 'Tela Solar 3%', pricePerM2: 120, img: 'https://placehold.co/100x100/eeeeee/747D64?text=Solar' },
-    { id: 'blackout', name: 'Blackout Premium', pricePerM2: 150, img: 'https://placehold.co/100x100/383838/ffffff?text=Blackout' },
-    { id: 'linho', name: 'Linho Sintético', pricePerM2: 180, img: 'https://placehold.co/100x100/A48955/ffffff?text=Linho' }
-  ];
-
-  const colors = ['#FFFFFF', '#F0F0F0', '#D1D5DB', '#A48955', '#383838'];
-
-  const calculatePrice = () => {
-    const area = (config.width / 100) * (config.height / 100);
-    const basePrice = config.material ? config.material.pricePerM2 * area : 0;
-    const minPrice = 150; // Minimum price rule
-    return Math.max(basePrice, minPrice);
-  };
-
-  return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        .nav-item { display: flex; align-items: center; padding: 12px 15px; color: var(--text-muted); border-radius: 12px; margin-bottom: 8px; transition: 0.3s; cursor: pointer; font-weight: 500; user-select: none; }
+        .nav-item:hover { background: rgba(255, 255, 255, 0.05); color: white; }
+        .nav-item.active { background: rgba(255, 31, 45, 0.1); color: var(--v4-neon-red); box-shadow: inset 3px 0 0 var(--v4-neon-red); }
         
-        {/* Visualizer (Left) */}
-        <div className="lg:col-span-8 bg-gray-100 rounded-lg p-8 min-h-[500px] flex items-center justify-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1595846519845-68e298c2edd8?auto=format&fit=crop&q=80')] bg-cover opacity-20"></div>
-            
-            {/* Window Frame Simulation */}
-            <div className="relative bg-white shadow-2xl border-8 border-gray-200 transition-all duration-500" 
-                 style={{ 
-                   width: `${Math.min(config.width * 2, 600)}px`, 
-                   height: `${Math.min(config.height * 2, 400)}px`,
-                   maxWidth: '90%',
-                   maxHeight: '90%'
-                 }}>
-                {/* The Blind */}
-                <div className="w-full h-full transition-colors duration-300 relative"
-                     style={{ 
-                       backgroundColor: config.color || '#e5e5e5',
-                       backgroundImage: config.material?.id === 'screen' ? 'radial-gradient(#ccc 1px, transparent 1px)' : 'none',
-                       backgroundSize: '4px 4px'
-                     }}>
-                      {/* Pull Chain */}
-                      <div className="absolute right-2 top-0 bottom-0 w-1 bg-gray-300 flex flex-col items-center justify-end pb-4">
-                        <div className="w-3 h-6 rounded-full bg-white border border-gray-300 shadow-sm"></div>
-                      </div>
-                      
-                      <div className="absolute inset-0 flex items-center justify-center">
-                         {!config.material && <span className="text-gray-400 text-sm font-medium bg-white/80 px-4 py-2 rounded">Selecione o material</span>}
-                      </div>
-                </div>
-            </div>
+        .user-profile { margin-top: auto; background: var(--bg-tertiary); padding: 15px; border-radius: 16px; display: flex; align-items: center; gap: 15px; border: 1px solid #333; }
+        
+        /* HEADER & FILTRO */
+        .header { margin-bottom: 30px; border-bottom: 1px solid #222; padding-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;}
+        .header-content h1 { font-size: 1.8rem; margin-bottom: 5px; color: white; }
+        .month-select { background: var(--bg-tertiary); color: white; border: 1px solid #444; padding: 10px 15px; border-radius: 8px; font-family: 'Inter'; font-size: 0.9rem; cursor: pointer; outline: none; min-width: 200px; }
+        .month-select:hover { border-color: var(--v4-neon-red); }
 
-            {/* Dimensions Indicator */}
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 px-4 py-2 rounded-full shadow text-xs font-bold text-gray-600 flex gap-4">
-                <span className="flex items-center gap-1"><Ruler size={14}/> L: {config.width}cm</span>
-                <span className="flex items-center gap-1"><Ruler size={14} className="rotate-90"/> A: {config.height}cm</span>
-            </div>
+        .card { background: var(--bg-secondary); border-radius: 20px; padding: 25px; border: 1px solid #222; box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative; overflow: hidden; }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--v4-neon-red), transparent); opacity: 0.5; }
+        .card.yellow-accent::before { background: linear-gradient(90deg, var(--cvc-neon-yellow), transparent); }
+        .card-title { color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; display: block; letter-spacing: 1px; }
+        
+        .card-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .mini-badge { background-color: var(--v4-neon-red); color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; box-shadow: 0 2px 5px rgba(255, 31, 45, 0.3); border: 1px solid rgba(255,255,255,0.2); }
+
+        .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; }
+        .span-4 { grid-column: span 4; } .span-8 { grid-column: span 8; } .span-12{ grid-column: span 12;}
+        
+        .dashboard-section { display: none; animation: fadeIn 0.4s ease; }
+        .active-section { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* MAPA */
+        .map-container { width: 100%; height: 500px; background-color: #1a1a1a; border-radius: 16px; border: 1px solid #333; z-index: 1; position: relative; }
+        .custom-pin { background-color: var(--v4-neon-red); width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 10px var(--v4-neon-red); }
+        .leaflet-popup-content-wrapper { background: #141414; color: white; border: 1px solid #333; font-family: 'Inter', sans-serif; }
+        .leaflet-popup-tip { background: #141414; border: 1px solid #333; }
+        .leaflet-container { background: #141414 !important; }
+
+        .chart-wrapper { position: relative; height: 220px; width: 100%; display: flex; justify-content: center; align-items: center; }
+        #error-display { display: none; position: fixed; bottom: 20px; right: 20px; background: #a30009; color: white; padding: 20px; border-radius: 10px; z-index: 10000; max-width: 400px; font-size: 0.9rem; border: 1px solid #ff1f2d; }
+    </style>
+</head>
+<body>
+
+    <div id="error-display"></div>
+
+    <div id="login-screen">
+        <div class="login-box">
+            <img src="data:image/webp;base64,UklGRpwEAABXRUJQVlA4IJAEAAAwIACdASpkAGQAPpE6mkiloyihKdM9oRASCWwAwzINfxHVWaw8F+Tv4zdXRx14A/HTqbqW84rmH/DfdH2n/Ev/UT+S/H/0k+Y39qvVk/4H6O+8T0AP7N/juto9AD9kvTI9mz90v2M9l652egLFzncz+X4fgz/pa5Weg8BZff7QUMRkndjSRbke0SWMMF7b3i8tO2U5n/fLf7kH+rzOvldOytP22E+IYtKM9DnpwB0f/apKpGmaKeV3TR2w+DPWqJs+cHj05hK4LdIu5tpxewSoH3ibX6MrZdYZ2IajE2RKtXIuRICX7gq286h0OnOLRUG0IpTB2S6Sbxc+2QeG3f7j73LpbEdBToeoQAD+/ho9hyZTMp9GKhzwuQY1SyVredtSksnAQUklC2Cj5cCywtyamrMbzH+riqH8pEvrm+pKf/c8HDIfGaxeOXHJ0jyMOyP9u7TnDyIv1Nseo3Vyi2tsr63fhG3fPNc5zEjCf4+bNY13h3IsOXc9ZPZljpIXtCT44qg6obrXOGDsQh7n4nIHcmvFKk2nZQg7rmnFOKjgFw4OReQiV/PAnPxvo+MaqSgGdX6gKxk9S7Nsfz/v66lUorSd3yaPufE1DdxbmQ09ESbmAG60TZXl9DdmtmU0OfzBxVG6AFdOLwvi40gxcB6tkhQMtqqCy7CfzA4H4f9EFApWqUgoF+g5uQp+AufohKkZN1gEwcTIK3C1zOAmohVe9dGM3zSUqZccSVouFotBWEUXJY27+dozzBvjVUIIgPV7vw53gnqsf0NzexdTkX3U0Wjs87CzpX8X1a0ZKhxtBrpzkoEBQUJuuFnU+LkKBwk59CVqOXtNSTrlElFuNH0BFQFnY0Z7ct9Ngx7cf171v8c2Pr8pwub22NzFxV46eR+BnhpB36Zq5DNqNIEqM25TqV5hWLwqsh+/34Q+glSAp1SRvXULtT412KZvjKRRYMML+CkLXTVk9QUS7pesIS8EkYwfrurQFM7Je5rrtUehCgqqu8u7ewQ7S8RWS/usdSoysbwiratLHWdxsKIgbueeI0kQf2iem/KAdFqPA8A8wCV/3fhbCXXnLsWeanAgEmGx2JIgqksKTl4hJrS4H/161i/n7cGurYKbivk9f74+HJtfsJp36gxEecc7NxFl94xwakGPwvWm6OFtLMjPI2UiHyuqcCafB4iLbnvgBlkG+RRMw9gbD0VD/vnBFrrlGIw43bzlZ6L9h68c1PNwl4/FOOymmEsRNiTPOLb5+HC8oPlgc76FtrQjcxzftSA3wDbAGS6KzzTPuSraTPl6qU1Rpef5XIYj782ogfUTf4//O2hqBgKQA/GEJ9rcDdNYizeJf9oFhgyOmH28h8z1iGjKdR8wntPP8OuOgfOBBJxmUTEkkNy3mxaYujPep2okZhhYK7Uj1shAscED2fbr7WuQPsIyHvkYDYfzPdrmXles+/6R7//c+gf1l0SMZEs7OEAQJfJt5AWCl3+MKmPsU/6DOMgV2yAe5An6q7UBHTJ2ASL5WVe+GsYGIlTnIOeXwf56F3/kvDLdSklC6mL8AAAA">
+            <h2 style="margin-bottom: 10px; font-size: 1.5rem; color: white;">V4 PLACERES&CO - CVC</h2>
+            <p style="color: #666; font-size: 0.9rem; margin-bottom: 30px;">Acesso Restrito - Franchise Intelligence</p>
+            <input type="text" class="login-input" placeholder="ID do Usuário" value="cvc.admin">
+            <input type="password" class="login-input" placeholder="Senha de Acesso" value="********">
+            <button class="login-btn" onclick="enterDashboard()">Entrar</button>
         </div>
-
-        {/* Configurator (Right) */}
-        <div className="lg:col-span-4 bg-white shadow-lg rounded-lg p-6 border border-gray-100">
-          <div className="mb-6 border-b border-gray-100 pb-4">
-            <h2 style={{ color: COLORS.sageGreen }} className="text-xl font-light mb-1">Monte sua Persiana</h2>
-            <p className="text-xs text-gray-500">Personalize cada detalhe da sua janela.</p>
-          </div>
-
-          {/* Stepper */}
-          <div className="flex justify-between mb-8 relative">
-            <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gray-100 -z-10"></div>
-            {[1, 2, 3].map((s) => (
-              <div 
-                key={s} 
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors duration-300 ${step >= s ? 'text-white' : 'bg-gray-200 text-gray-500'}`}
-                style={{ backgroundColor: step >= s ? COLORS.sageGreen : undefined }}
-              >
-                {s}
-              </div>
-            ))}
-          </div>
-
-          {/* Steps Content */}
-          <div className="min-h-[250px]">
-            {step === 1 && (
-              <div className="animate-fade-in">
-                <h3 className="font-bold text-gray-700 mb-4 flex items-center gap-2"><Ruler size={18}/> Medidas (cm)</h3>
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <label className="text-xs font-bold text-gray-500 uppercase block mb-1">Largura</label>
-                    <input 
-                      type="number" 
-                      value={config.width} 
-                      onChange={(e) => setConfig({...config, width: Number(e.target.value)})}
-                      className="w-full border border-gray-300 rounded p-3 text-center font-mono text-lg focus:border-sage-500 outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs font-bold text-gray-500 uppercase block mb-1">Altura</label>
-                    <input 
-                      type="number" 
-                      value={config.height} 
-                      onChange={(e) => setConfig({...config, height: Number(e.target.value)})}
-                      className="w-full border border-gray-300 rounded p-3 text-center font-mono text-lg focus:border-sage-500 outline-none"
-                    />
-                  </div>
-                </div>
-                <div className="bg-pale-green/30 p-3 rounded text-xs text-gray-600 border border-gray-100">
-                    <span className="font-bold block mb-1">Dica do Especialista:</span>
-                    Adicione 15cm para cada lado da janela para um melhor acabamento.
-                </div>
-              </div>
-            )}
-
-            {step === 2 && (
-              <div className="animate-fade-in">
-                <h3 className="font-bold text-gray-700 mb-4 flex items-center gap-2"><PenTool size={18}/> Material & Cor</h3>
-                <div className="space-y-3 mb-6">
-                  {materials.map(mat => (
-                    <div 
-                        key={mat.id}
-                        onClick={() => setConfig({...config, material: mat})}
-                        className={`flex items-center gap-4 p-3 rounded border cursor-pointer transition-all ${config.material?.id === mat.id ? 'border-sage-500 bg-gray-50 ring-1 ring-sage-500' : 'border-gray-200 hover:border-gray-300'}`}
-                    >
-                        <div className="w-12 h-12 rounded bg-gray-200 bg-cover" style={{ backgroundImage: `url(${mat.img})` }}></div>
-                        <div className="flex-1">
-                            <h4 className="font-bold text-sm text-gray-800">{mat.name}</h4>
-                            <p className="text-xs text-gray-500">A partir de R$ {mat.pricePerM2}/m²</p>
-                        </div>
-                    </div>
-                  ))}
-                </div>
-                
-                {config.material && (
-                    <div>
-                        <label className="text-xs font-bold text-gray-500 uppercase block mb-2">Selecione a tonalidade:</label>
-                        <div className="flex gap-3">
-                            {colors.map(c => (
-                                <div 
-                                    key={c}
-                                    onClick={() => setConfig({...config, color: c})}
-                                    className={`w-8 h-8 rounded-full shadow-sm cursor-pointer border-2 ${config.color === c ? 'border-sage-500 scale-110' : 'border-transparent hover:scale-105'}`}
-                                    style={{ backgroundColor: c }}
-                                ></div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-              </div>
-            )}
-
-            {step === 3 && (
-               <div className="animate-fade-in">
-                 <h3 className="font-bold text-gray-700 mb-4">Resumo do Projeto</h3>
-                 <div className="bg-gray-50 p-4 rounded border border-gray-100 mb-4 text-sm">
-                    <div className="flex justify-between mb-2">
-                        <span className="text-gray-500">Dimensões:</span>
-                        <span className="font-bold">{config.width}cm x {config.height}cm</span>
-                    </div>
-                    <div className="flex justify-between mb-2">
-                        <span className="text-gray-500">Material:</span>
-                        <span className="font-bold">{config.material?.name || 'Não selecionado'}</span>
-                    </div>
-                    <div className="flex justify-between mb-2">
-                        <span className="text-gray-500">Instalação:</span>
-                        <span className="font-bold capitalize">{config.mount}</span>
-                    </div>
-                    <div className="border-t border-gray-200 my-3"></div>
-                    <div className="flex justify-between items-center">
-                        <span className="text-gray-800 font-bold">Total Estimado:</span>
-                        <span style={{ color: COLORS.gold }} className="text-xl font-bold">
-                            R$ {calculatePrice().toFixed(2)}
-                        </span>
-                    </div>
-                 </div>
-                 <div className="text-xs text-gray-400 text-center mb-4">
-                    Prazo de produção: 7 a 10 dias úteis
-                 </div>
-               </div>
-            )}
-          </div>
-
-          {/* Navigation Buttons */}
-          <div className="flex gap-3 mt-6 pt-4 border-t border-gray-100">
-             {step > 1 && (
-                <button 
-                    onClick={() => setStep(step - 1)}
-                    className="flex-1 py-3 border border-gray-300 rounded text-gray-600 font-bold text-sm hover:bg-gray-50 transition"
-                >
-                    Voltar
-                </button>
-             )}
-             {step < 3 ? (
-                <button 
-                    onClick={() => setStep(step + 1)}
-                    disabled={step === 2 && !config.material}
-                    style={{ backgroundColor: step === 2 && !config.material ? '#ccc' : COLORS.sageGreen }}
-                    className="flex-1 py-3 rounded text-white font-bold text-sm hover:opacity-90 transition shadow-md"
-                >
-                    Continuar
-                </button>
-             ) : (
-                <button 
-                    onClick={() => onAddToCart({
-                        id: Date.now(),
-                        name: `Persiana Personalizada - ${config.material.name}`,
-                        price: calculatePrice(),
-                        image: config.material.img
-                    })}
-                    style={{ backgroundColor: COLORS.gold }}
-                    className="flex-1 py-3 rounded text-white font-bold text-sm hover:bg-yellow-700 transition shadow-md flex justify-center items-center gap-2"
-                >
-                    <ShoppingCart size={18} />
-                    Adicionar ao Carrinho
-                </button>
-             )}
-          </div>
-        </div>
-      </div>
     </div>
-  );
-};
 
-// 5. MAIN APP
-const CurtainsCornerApp = () => {
-  const [currentPage, setCurrentPage] = useState('home');
-  const [cart, setCart] = useState([]);
-
-  const addToCart = (product) => {
-    setCart([...cart, product]);
-    alert(`${product.name} adicionado ao carrinho!`);
-  };
-
-  return (
-    <div className="min-h-screen flex flex-col font-sans text-gray-800 bg-white">
-      <Header cartCount={cart.length} onNavigate={setCurrentPage} />
-      
-      <main className="flex-1">
-        {currentPage === 'home' && (
-          <>
-            <Hero />
+    <div id="dashboard-container">
+        <aside class="sidebar">
+            <div style="display: flex; align-items: center; margin-bottom: 50px; gap: 15px;">
+                <img src="data:image/webp;base64,UklGRp4DAABXRUJQVlA4IJIDAADQGACdASpQAFAAPpE6mUgloyKhJ7VeuLASCWwAwNm0/pPQibU69+Sn4wdQXwh4R/HDqpjr9kv3z7wPeB/lfYf5gH6Xf5H+UdZ/zAftn+wHvE/gB2AH9u6lz0AP1A9Kj91fhX/c39jPaWcru3jov0zhW9PU98+byajkjDFAbXoNu8wmuxYjZlGeKQRt6t6fm8telKsGsCGRAvJItQjGLYBsYC7Clke1NwUIqiVP6MLX4s32uk0XiwOYRmQaWFH51pWyxrWqOw41j0D8j5Hui0AA/v55tLcV4Y6mmmK/BuN3V6PZpPf1qoPqLCQHdSnbtv2a9czILQkoWChlU+W8jk1hh1CG1bBwQm11hFcnUyz8tmcIGUOlm5/KZmKX5S/yFMpIF5Ks1tNhOKyBsyf8/NLis71L+0q1eDdBMCRjSEhE3lo5yoSWIy+sIfH2WWfJbXLjN9WHWnDdJ9ZG6VGisCNgQSdmtkCcEhKJd8rUabrLeYRFMk0YJxK0NSX/QVYd62GykOxoZgLBcpsTgvQnyguq2JftBApkXdP/9fw3BmHgVrDkA6JnG3IyAXjKYvUx+r1Aw79CnP31UYIVw6zH9ip8fkklQaSNLi7fNaNG0BB7PK+qg/5C5JVRlJQCTov8dNEsPOyyNy2Svs1hDehoaXUo0POh5WrBDEYFZcZG1JoDVe1fprQvvr/RctYH9vfJHgPnM8brHCl96vcXqQcgzMLAbiajQr2ZIL5YuUXoRNyOBAuj4Ng2QN5rSQeQaWG7Kkj7iqk8yh80M0wrqAgtP7fyHFt+zgfx1zFB0BRjcdDA6oPmA1MytL3G2NGf9iKM30uVwGcvh2/bYQMbYIz/G211wIPkUrMDArQFNyXeUv8/WoMcN5YmWrphrUpOd2qfuAXZrse5nUBVhHpfua2L1+kPbvAFvz85aR3eywiSx/S82jx3n6Nt1WGuVbo7ZimNVLSiW0UEv6PxQQr0ztwCnlx8A5GoB+a8MCWRWziiXbiWPagExpf8xPxpy40AnTZT4xUJMVSA3kA1HgbS9Agu3IC+ric/Aj26/Yyv27flEDzMxM+TlvfBD8oi498PFYQH4+ric7bP27nwRcb8OeBLTIAeTW4lRpPVb8M2oCQDafZxS2gqwq6/yVN5+/5p9OA4Qi5uGbU5KBIMm+Cf109IfwLfrn0DrfzxjgvxoyAgfGe0bsB8PGWQF+dBAf9t6bLdCEAAAA==">
+                <span style="font-weight: 700; font-size: 1rem; letter-spacing: 0.5px;">V4 PLACERES</span> 
+            </div>
+            <div style="color: var(--text-muted); font-size: 0.75rem; margin-bottom: 15px; text-transform: uppercase;">Analytics</div>
+            <div id="btn-overview" class="nav-item active" onclick="switchTab('section-overview', 'btn-overview')">Overview Geral</div>
+            <div id="btn-leads" class="nav-item" onclick="switchTab('section-leads', 'btn-leads')">Performance de Leads</div>
             
-            {/* Features Bar */}
-            <div className="bg-white border-b border-gray-100 py-6">
-                <div className="max-w-7xl mx-auto px-4 flex flex-wrap justify-center md:justify-between gap-6">
-                    <div className="flex items-center gap-3">
-                        <Truck style={{ color: COLORS.sageGreen }} size={28} />
-                        <div>
-                            <p className="text-sm font-bold text-gray-700">Frete Grátis</p>
-                            <p className="text-xs text-gray-500">Para compras acima de R$ 500</p>
+            <div id="btn-cvc-status" class="nav-item" onclick="switchTab('section-cvc-status', 'btn-cvc-status')">Status CVC</div>
+            
+            <div id="btn-geo" class="nav-item" onclick="switchTab('section-geo', 'btn-geo')">Expansão Geográfica</div>
+            <div id="btn-lives" class="nav-item" onclick="switchTab('section-lives', 'btn-lives')">Relatório de Lives</div>
+            <div id="btn-repasse" class="nav-item" onclick="switchTab('section-repasse', 'btn-repasse')">Lista de Repasse</div>
+            <div class="user-profile">
+                <img src="data:image/webp;base64,UklGRv4FAABXRUJQVlA4IPIFAAAwHACdASpQAFAAPo00lkelIqIhMLscqKARiWwAuzmhfuX4zbDJ078YPZPqr9j/AXFNHy7N+TP31+oD7mfcA/RP/Vflj2gPMB+pn/O/5nvLel30Bv5//Yese9Av9tPS1/aj4MP2d/bT4Cf5l/Z/+jTsRYVTm+DtXboRlTid0gU6v/aeM36u9HHrC+hyrMYtnUhJe4BjEaqa1UbLwvkVmiXy/2ek7pWg707SMmWej0V9s+cqBLdjIlZmvXz6WIZwLumIVVFqomg7U4yZlpv0rSN8mBYwNxdWUJM7msSmXo2myJV/5p8882kh1AAA/vfUaxb5SH8pD8o8JKatfTIqOE2wu83zLnFD9pVyod42r6sdPPvPIDdECNGfgSrQYhDoAwYdZNUNaHpyNPDk3foX4ZJLOqJHMWP77/ZP+Qb9u7wu9pMAV4TyK1kqg/Wls9rBM7zwQzlaFd9AbzbBtd+u8Jss65/WslV6OqNeuJL1/oz3+E2yxnyEe+8YGbuze50Vk+Cv4JndpQqtMLgk8p1cg8/l+WXubnaCNGLyAn3wntxz6HfX0xCVdEeK0X1hPbVU1/pMOzuH1ltkDwpGfweeq9kV78d7Ggw+X63ArEl3ln2Rqc0TZf4/BXMY//JqSzUeKRoczeqTwrJQ/wVzy/JJD265aUOVitDzWBELmcmrwHoZclL4QRbO35WXMiXCsJ7nect168fxGjPdwBw1lI6EsDHUzXJTwOU0Pa4HfEM61CRmBv321R9Sb4BHoE8KmlSNjgAk+XGNAxYyM0CCmRP4GX3bbEyryeV9xodyY6Rz40DxtUfKRj4YyiT7lvNixJk0+Bv0KK45bE3oAw2qKojOAUHiBg0mk4Muj/S7cCjDayHd4DNF8OyaWjBdBA5vhjTVeuuH9BEhDQULmeBq02Y+innv6lHTAqVTQ+4sjuw2k9uYVDWZUFW4AJaEt4dSFFf6D3ZBbNgmu5xfnQaffdKkMyT87hnhvA5Ca4i3AS6wMJrEfb+vUoO01prq/vKvcenn54GahXaUh8b4BnsfIF+8do3uL2nVPKAPIYEVfGDT44/gUutsrWqDTKonyF0nj+Id4K4vkHhftm5upINFd//PRaRfROsaJbU26/FUo39iJdHssDZojodhxr7PRYYKV9LLGHaO46NAs2SYuwSN8OPL00L4DgBLuS1DfvFylsQes3UQHjrYK+az6UMOls5SOZrattP3pvjQo+CSiOXtG0jbmMv6Qr/oy1msSGKvAQk/zgH/JQ9WhfY+PNxqQ/ELAHJYyeL7TfFYIDm6xg1Sy/wcxx5zCrs0oHXOi5WltwH4nbgAhE2/BdN73cPk+psnvrAPxaEVIfenO3s0p5g4Vcw72nTg0D0cNjyCtfGG669qdf09JuqW682+0SQfM+E6HeoYfXLbawzD5VfzM9jR603pC8TwgNQIoHJO7L+Xd1/pwztWQ0ntc/UF5dOmK7lE/iTaIh/fy196noZetQmMfPS0LEjqueSP5IXZv/9/WOO5UqED0nV0jkC89DOILCkZ+W0BgRdum/Al3UtZ1K9pzeUucQXLABXHI+y6TFb5cTbrQQSkAqFAI3d9j01xnicun2dcLJGfcvkXyElrr613hjRPO+s2GIMtbNzCV/TLaBfCRZABLkG5ITZ+lOVsp1PJZqspHqZ8dnhUTcU1gh916ts9CtfNpmXhOiQCKOudY62DnU9p/auALkt8kbT/y1dQDvjRsT8j4GnhnJdvUBMhf1rq3X5fQWFfZDoGn2gbQALhWz0WXb37JZYmenZ5Lt9mH2Y2+sHBy/1rGn/zMaAss7HYFnVOz8+lxyo760HskJu5gFeoyAKdUBkWlvBVD9bynrgsPjl4Af1vlo6tlriteEkzyOB0OfkUZnMK7qhDhM/WR7vUuZ/jmkpP8bbpRoMF/va2Q1wmvW7Xg/E+ul4O0ljQkJV4nf6qWv1a/npHtKDTJqXK9Hf3xs6CsjYgkLBixwup2nRm1mCc19z+WI/1BStwDkJI16wIFNYpl10HzydD5j0gAAAA">
+                <div>
+                    <div style="font-weight: 600; font-size: 0.9rem;">Admin CVC</div>
+                    <div style="color: var(--text-muted); font-size: 0.75rem;">Gestão</div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div id="section-overview" class="dashboard-section active-section">
+                <div class="header">
+                    <div class="header-content">
+                        <h1>Visão Geral de Expansão</h1>
+                        <p id="header-date">Selecione o período para análise</p>
+                    </div>
+                    <select id="monthFilter" class="month-select" onchange="applyDateFilter()">
+                        <option value="all">Todo o Período</option>
+                        </select>
+                </div>
+
+                <div class="grid">
+                    <div class="card span-4">
+                        <div class="card-header-flex">
+                            <span class="card-title" style="margin-bottom: 0;">STATUS DA BASE</span>
+                            <div id="kpi-bant-mini" class="mini-badge">0 BANT4</div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="chartQualidade"></canvas>
                         </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <CreditCard style={{ color: COLORS.sageGreen }} size={28} />
-                        <div>
-                            <p className="text-sm font-bold text-gray-700">Até 10x Sem Juros</p>
-                            <p className="text-xs text-gray-500">Nos cartões de crédito</p>
+
+                    <div class="card span-8"><span class="card-title" style="margin-bottom: 20px;">Top 5 Cidades (Vol. Leads)</span><div style="height: 220px;"><canvas id="chartCidades"></canvas></div></div>
+                    
+                    <div class="card span-4 yellow-accent"><span class="card-title" style="margin-bottom: 20px;">PARTICIPAÇÃO LIVE</span><div style="height: 200px;"><canvas id="chartReuniao"></canvas></div></div>
+                    
+                    <div class="card span-8"><span class="card-title" style="margin-bottom: 20px;">STATUS DO FUNIL (Detalhado)</span><div style="height: 200px;"><canvas id="chartLive"></canvas></div></div>
+
+                    <div class="card span-12">
+                        <span class="card-title" style="margin-bottom: 20px;">TOP GERENTES (Por Volume de Repasse)</span>
+                        <div style="height: 300px;"><canvas id="chartRepasseOverview"></canvas></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="section-leads" class="dashboard-section">
+                <div class="header"><h1>Performance de Leads</h1><p>Evolução diária (Filtro Aplicado).</p></div>
+                <div class="grid"><div class="card span-12">
+                    <span id="leads-title" class="card-title" style="margin-bottom: 20px;">VOLUME DIÁRIO DE LEADS</span>
+                    <div style="height: 400px;"><canvas id="chartLeadsTimeline"></canvas></div>
+                </div></div>
+            </div>
+
+            <div id="section-cvc-status" class="dashboard-section">
+                <div class="header"><h1>Status com a CVC</h1><p>Lista de leads com status preenchido.</p></div>
+                <div class="grid">
+                    <div class="card span-12">
+                         <div style="overflow-x: auto; max-height: 500px; border-radius: 8px; border: 1px solid #333;">
+                            <table id="tabela-cvc" style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+                                <thead style="background: var(--bg-tertiary); position: sticky; top: 0; z-index: 5;">
+                                    <tr>
+                                        <th style="padding: 12px; border-bottom: 2px solid #333; color: white;">DATA</th>
+                                        <th style="padding: 12px; border-bottom: 2px solid #333; color: white;">NOME</th>
+                                        <th style="padding: 12px; border-bottom: 2px solid #333; color: white;">CIDADE</th>
+                                        <th style="padding: 12px; border-bottom: 2px solid #333; color: white;">STATUS CVC</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
                         </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <ShieldCheck style={{ color: COLORS.sageGreen }} size={28} />
-                        <div>
-                            <p className="text-sm font-bold text-gray-700">Garantia de 2 Anos</p>
-                            <p className="text-xs text-gray-500">Em mecanismos e tecidos</p>
+                </div>
+            </div>
+            
+            <div id="section-geo" class="dashboard-section">
+                <div class="header"><h1>Expansão Geográfica</h1><p>Mapeamento das praças.</p></div>
+                <div class="grid"><div class="card span-12"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;"><span class="card-title" style="margin:0;">Mapa Interativo</span></div><div id="map" class="map-container"></div></div></div>
+            </div>
+            
+            <div id="section-lives" class="dashboard-section">
+                <div class="header"><h1>Relatório de Lives</h1><p>Cadastros para a Live.</p></div>
+                <div class="grid"><div class="card span-12"><span class="card-title" style="margin-bottom: 20px;">EVOLUÇÃO DE CADASTROS (LIVE)</span><div style="height: 400px;"><canvas id="chartLivesTimeline"></canvas></div></div></div>
+            </div>
+
+            <div id="section-repasse" class="dashboard-section">
+                <div class="header">
+                    <h1>Lista de Repasse</h1>
+                    <p>Consulta detalhada (Filtra também pelo mês selecionado).</p>
+                </div>
+                <div class="grid">
+                    <div class="card span-12">
+                        <div style="margin-bottom: 20px; display: flex; gap: 15px; align-items: center;">
+                            <input type="text" id="filtroRepasse" class="login-input" style="margin-bottom: 0; width: 300px;" placeholder="🔍 Filtrar na lista (ex: nome, cidade...)" onkeyup="filtrarTabelaRepasse()">
+                            <span id="total-repasse" class="mini-badge" style="background: var(--bg-tertiary); color: var(--text-muted);">Carregando...</span>
+                        </div>
+                        <div style="overflow-x: auto; max-height: 500px; border-radius: 8px; border: 1px solid #333;">
+                            <table id="tabela-repasse" style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+                                <thead style="background: var(--bg-tertiary); position: sticky; top: 0; z-index: 5;">
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Custom Builder Banner */}
-            <section className="py-12 bg-white">
-                <div className="max-w-7xl mx-auto px-4">
-                    <div 
-                        onClick={() => setCurrentPage('build')}
-                        className="rounded-lg overflow-hidden relative cursor-pointer group h-[200px] md:h-[280px]"
-                    >
-                        <img src="https://images.unsplash.com/photo-1594040226829-71248af93329?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" className="w-full h-full object-cover"/>
-                        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors flex flex-col items-center justify-center text-center">
-                            <h2 className="text-3xl md:text-5xl text-white font-light mb-4">Monte sua Persiana</h2>
-                            <p className="text-gray-200 mb-6 font-medium">Personalize medidas, tecidos e cores em 3 passos simples</p>
-                            <button className="bg-white text-gray-800 px-8 py-3 rounded font-bold uppercase tracking-wider text-xs hover:bg-gray-100 transition">
-                                Começar Agora
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Product Grid */}
-            <section className="py-8 bg-gray-50">
-              <div className="max-w-7xl mx-auto px-4">
-                <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl font-light text-gray-800">
-                        <span className="font-bold border-b-2 pb-1" style={{ borderColor: COLORS.sageGreen }}>Destaques</span> da Semana
-                    </h2>
-                    <button className="text-xs font-bold uppercase text-gray-500 hover:text-sage-600 flex items-center gap-1">
-                        Ver Todos <ChevronRight size={14} />
-                    </button>
-                </div>
-                
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {MOCK_PRODUCTS.map(product => (
-                    <ProductCard key={product.id} product={product} onAdd={addToCart} />
-                  ))}
-                </div>
-              </div>
-            </section>
-
-            {/* About Section (Brand Identity) */}
-            <section className="py-16 bg-white">
-                <div className="max-w-4xl mx-auto text-center px-4">
-                    <h3 style={{ color: COLORS.gold }} className="text-sm font-bold tracking-[0.2em] uppercase mb-4">Sobre a Marca</h3>
-                    <h2 className="text-3xl font-light text-gray-800 mb-6">"Cada cortina carrega a leveza do toque e o calor de quem habita."</h2>
-                    <p className="text-gray-500 leading-relaxed">
-                        Somos a marca que transforma janelas em experiências sensoriais. Unimos a elegância do feito à mão com a praticidade do design contemporâneo. Nosso arquétipo é o cuidador, sempre prontos para auxiliar você a criar o ambiente perfeito.
-                    </p>
-                </div>
-            </section>
-          </>
-        )}
-
-        {currentPage === 'build' && (
-            <div className="animate-fade-in pb-12">
-                 <div className="bg-gray-50 py-4 mb-8">
-                    <div className="max-w-7xl mx-auto px-4 flex items-center gap-2 text-xs text-gray-500">
-                        <span className="cursor-pointer hover:underline" onClick={() => setCurrentPage('home')}>Home</span>
-                        <ChevronRight size={12} />
-                        <span className="font-bold text-gray-700">Monte sua Persiana</span>
-                    </div>
-                 </div>
-                <CustomBuilder onAddToCart={addToCart} />
-            </div>
-        )}
-
-        {currentPage === 'cart' && (
-            <div className="max-w-4xl mx-auto px-4 py-12">
-                 <h2 className="text-2xl font-light mb-8">Seu Carrinho</h2>
-                 {cart.length === 0 ? (
-                     <div className="text-center py-12 bg-gray-50 rounded">
-                         <ShoppingCart size={48} className="mx-auto text-gray-300 mb-4" />
-                         <p className="text-gray-500">Seu carrinho está vazio.</p>
-                         <button onClick={() => setCurrentPage('home')} className="mt-4 text-sage-600 font-bold underline">Voltar para a loja</button>
-                     </div>
-                 ) : (
-                     <div className="space-y-4">
-                         {cart.map((item, idx) => (
-                             <div key={idx} className="flex items-center gap-4 border p-4 rounded bg-white">
-                                 <div className="w-20 h-20 bg-gray-200 rounded overflow-hidden">
-                                     {item.image && <img src={item.image} alt={item.name} className="w-full h-full object-cover" />}
-                                 </div>
-                                 <div className="flex-1">
-                                     <h3 className="font-bold text-gray-800">{item.name}</h3>
-                                     <p className="text-xs text-gray-500">Ref: {item.id}</p>
-                                 </div>
-                                 <div style={{ color: COLORS.gold }} className="font-bold text-lg">
-                                     R$ {item.price.toFixed(2)}
-                                 </div>
-                                 <button onClick={() => {
-                                     const newCart = [...cart];
-                                     newCart.splice(idx, 1);
-                                     setCart(newCart);
-                                 }} className="text-gray-400 hover:text-red-500">
-                                     <X size={20} />
-                                 </button>
-                             </div>
-                         ))}
-                         <div className="flex justify-between items-center pt-6 border-t mt-6">
-                             <span className="text-xl font-light">Total</span>
-                             <span style={{ color: COLORS.sageGreen }} className="text-2xl font-bold">
-                                 R$ {cart.reduce((a, b) => a + b.price, 0).toFixed(2)}
-                             </span>
-                         </div>
-                         <button style={{ backgroundColor: COLORS.sageGreen }} className="w-full py-4 text-white font-bold rounded mt-4 uppercase tracking-wider hover:opacity-90">
-                             Finalizar Compra
-                         </button>
-                     </div>
-                 )}
-            </div>
-        )}
-      </main>
-
-      {/* FOOTER */}
-      <footer style={{ backgroundColor: COLORS.darkGrey }} className="text-gray-400 pt-16 pb-8 text-sm">
-        <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-            <div>
-                <h4 className="text-white font-bold uppercase tracking-wider mb-4">Institucional</h4>
-                <ul className="space-y-2">
-                    <li className="hover:text-white cursor-pointer">Sobre a Curtains Corner</li>
-                    <li className="hover:text-white cursor-pointer">Política de Privacidade</li>
-                    <li className="hover:text-white cursor-pointer">Trabalhe Conosco</li>
-                    <li className="hover:text-white cursor-pointer">Seja um Parceiro</li>
-                </ul>
-            </div>
-            <div>
-                <h4 className="text-white font-bold uppercase tracking-wider mb-4">Ajuda & Suporte</h4>
-                <ul className="space-y-2">
-                    <li className="hover:text-white cursor-pointer">Trocas e Devoluções</li>
-                    <li className="hover:text-white cursor-pointer">Prazos de Entrega</li>
-                    <li className="hover:text-white cursor-pointer">Como Medir sua Janela</li>
-                    <li className="hover:text-white cursor-pointer">Central de Atendimento</li>
-                </ul>
-            </div>
-            <div>
-                <h4 className="text-white font-bold uppercase tracking-wider mb-4">Formas de Pagamento</h4>
-                <div className="flex gap-2 flex-wrap">
-                    <div className="w-10 h-6 bg-white rounded opacity-80"></div>
-                    <div className="w-10 h-6 bg-white rounded opacity-80"></div>
-                    <div className="w-10 h-6 bg-white rounded opacity-80"></div>
-                    <div className="w-10 h-6 bg-white rounded opacity-80"></div>
-                </div>
-            </div>
-            <div>
-                <h4 className="text-white font-bold uppercase tracking-wider mb-4">Atendimento</h4>
-                <p className="mb-2">Seg a Sex: 08h às 18h</p>
-                <p className="mb-4">Sáb: 08h às 12h</p>
-                <div className="flex gap-4 mt-4">
-                    <div className="w-8 h-8 rounded-full bg-gray-700 hover:bg-sage-600 cursor-pointer transition flex items-center justify-center text-white">IG</div>
-                    <div className="w-8 h-8 rounded-full bg-gray-700 hover:bg-sage-600 cursor-pointer transition flex items-center justify-center text-white">FB</div>
-                    <div className="w-8 h-8 rounded-full bg-gray-700 hover:bg-sage-600 cursor-pointer transition flex items-center justify-center text-white">YT</div>
-                </div>
-            </div>
-        </div>
-        <div className="border-t border-gray-700 pt-8 text-center text-xs">
-            <p>&copy; 2024 Curtains Corner By Deux. Todos os direitos reservados.</p>
-            <p className="mt-2 text-gray-600">CNPJ: 00.000.000/0000-00 | Rua Exemplo, 123 - São Paulo/SP</p>
-        </div>
-      </footer>
+        </main>
     </div>
-  );
-};
 
-export default CurtainsCornerApp;
+    <script>
+        // CONFIG LINKS
+        const LEADS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSq7tm8TN8KWT9sFip9UkeghlkZUOf3J-PKP035h1_EKNvOh-SXCcOakUTXKS5NI2xJ-hzRzQFruaRg/pub?gid=1787906905&single=true&output=csv';
+        const LIVE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS8KWWCjb7eYtXhLEpsgxgRI7wurO2HqO0YLcoSAKxkdLTuVGNiQ86HRMz5AKLaIJbnckxl9P4d6TJP/pub?gid=859560778&single=true&output=csv';
+        const REPASSE_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4VzCT82OlId7PUor1-cs7e-Phj47EhC5ViQPEtZ8QitfCBUBASg1WUlUIHb6ShIBH9vYSJqPkd3Yq/pub?gid=0&single=true&output=csv';
+
+        const COORDENADAS = { "sao paulo": [-23.5505, -46.6333], "sp": [-23.5505, -46.6333], "rio de janeiro": [-22.9068, -43.1729], "rj": [-22.9068, -43.1729], "belo horizonte": [-19.9167, -43.9345], "bh": [-19.9167, -43.9345], "brasilia": [-15.7975, -47.8919], "df": [-15.7975, -47.8919], "salvador": [-12.9777, -38.5016], "ba": [-12.9777, -38.5016], "fortaleza": [-3.7172, -38.5434], "ce": [-3.7172, -38.5434], "curitiba": [-25.4284, -49.2733], "pr": [-25.4284, -49.2733], "manaus": [-3.1190, -60.0217], "am": [-3.1190, -60.0217], "recife": [-8.0476, -34.8770], "pe": [-8.0476, -34.8770], "porto alegre": [-30.0346, -51.2177], "rs": [-30.0346, -51.2177], "goiania": [-16.6869, -49.2648], "go": [-16.6869, -49.2648], "belem": [-1.4558, -48.4902], "pa": [-1.4558, -48.4902], "guarulhos": [-23.4515, -46.5333], "campinas": [-22.9099, -47.0626], "sao luis": [-2.5307, -44.3068], "ma": [-2.5307, -44.3068], "sao goncalo": [-22.8275, -43.0631], "maceio": [-9.6662, -35.7351], "al": [-9.6662, -35.7351], "duque de caxias": [-22.7923, -43.3108], "campo grande": [-20.4697, -54.6201], "ms": [-20.4697, -54.6201], "natal": [-5.7945, -35.2110], "rn": [-5.7945, -35.2110], "teresina": [-5.0919, -42.8034], "pi": [-5.0919, -42.8034], "sao bernardo do campo": [-23.6914, -46.5646], "joao pessoa": [-7.1195, -34.8450], "pb": [-7.1195, -34.8450], "nova iguacu": [-22.7561, -43.4607], "santo andre": [-23.6638, -46.5383], "osasco": [-23.5336, -46.7920], "sao jose dos campos": [-23.2237, -45.9009], "sjc": [-23.2237, -45.9009], "jaboatao dos guararapes": [-8.1782, -35.0354], "ribeirao preto": [-21.1704, -47.8103], "uberlandia": [-18.9113, -48.2622], "contagem": [-19.9326, -44.0538], "sorocaba": [-23.5015, -47.4521], "aracaju": [-10.9472, -37.0731], "se": [-10.9472, -37.0731], "cuiaba": [-15.6014, -56.0979], "mt": [-15.6014, -56.0979], "vitoria": [-20.3155, -40.3128], "es": [-20.3155, -40.3128], "juiz de fora": [-21.7661, -43.3503], "londrina": [-23.3045, -51.1696], "niteroi": [-22.8808, -43.1043], "florianopolis": [-27.5954, -48.5480], "sc": [-27.5954, -48.5480], "palmeira dos indios": [-9.4079, -36.6322], "juazeiro do norte": [-7.2372, -39.3222] };
+
+        // Variáveis Globais
+        let RAW_LEADS = [];
+        let RAW_REPASSE = [];
+        let RAW_REPASSE_HEADER = [];
+        
+        let STRUCT_LIVE_DATA = []; 
+        
+        let chartQualidade, chartCidades, chartReuniao, chartLive, chartLeadsTimeline, chartLivesTimeline, chartRepasseOverview, map;
+
+        function showError(msg) { document.getElementById('error-display').innerHTML = `<strong>⚠️ Erro:</strong><br>${msg}`; document.getElementById('error-display').style.display = 'block'; }
+
+        function enterDashboard() {
+            document.getElementById('login-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('dashboard-container').style.display = 'flex';
+                initCharts(); 
+                setTimeout(initMap, 500); 
+                fetchData();
+            }, 500);
+        }
+
+        function switchTab(t, b) {
+            document.querySelectorAll('.dashboard-section').forEach(e=>e.style.display='none');
+            document.getElementById(t).style.display='block';
+            document.querySelectorAll('.nav-item').forEach(e=>e.classList.remove('active'));
+            document.getElementById(b).classList.add('active');
+            if(t==='section-geo') setTimeout(()=> { if(map) map.invalidateSize(); }, 200);
+        }
+
+        function parseCSV(text) {
+            const lines = text.split('\n');
+            const separator = (lines[0].match(/;/g)||[]).length > (lines[0].match(/,/g)||[]).length ? ';' : ',';
+            const result = [];
+            for(let i=0; i<lines.length; i++) {
+                if(!lines[i].trim()) continue;
+                const regex = new RegExp(`(?:${separator}|\\r?\\n|^)(?:"([^"]*)"|([^"${separator}\\r\\n]*))`, 'gi');
+                const row = [];
+                let matches;
+                while((matches = regex.exec(lines[i]))) row.push(matches[1] || matches[2] || ''.trim());
+                result.push(row);
+            }
+            return result;
+        }
+
+        function getMonthYearFromDate(dateStr) {
+            if(!dateStr) return null;
+            const parts = dateStr.trim().split(' ')[0].split('/');
+            if(parts.length >= 2) {
+                const y = parts[2] && parts[2].length === 4 ? parts[2] : new Date().getFullYear();
+                const m = parts[1].padStart(2, '0');
+                return `${y}-${m}`;
+            }
+            return null;
+        }
+
+        function populateMonthFilter() {
+            const months = new Set();
+            RAW_LEADS.forEach(l => { const my = getMonthYearFromDate(l.data); if(my && my >= '2026-01') months.add(my); });
+            RAW_REPASSE.forEach(r => { const my = getMonthYearFromDate(r[0]); if(my && my >= '2026-01') months.add(my); });
+            STRUCT_LIVE_DATA.forEach(item => { const my = getMonthYearFromDate(item.date); if(my && my >= '2026-01') months.add(my); });
+
+            const sortedMonths = Array.from(months).sort().reverse(); 
+            const select = document.getElementById('monthFilter');
+            select.innerHTML = '<option value="all">Todo o Período</option>';
+            sortedMonths.forEach(m => {
+                const [ano, mes] = m.split('-');
+                const nomeMes = new Date(ano, mes - 1).toLocaleString('pt-BR', { month: 'long' }).toUpperCase();
+                const opt = document.createElement('option');
+                opt.value = m; opt.innerText = `${nomeMes} / ${ano}`;
+                select.appendChild(opt);
+            });
+        }
+
+        function applyDateFilter() {
+            const selected = document.getElementById('monthFilter').value;
+            
+            let filteredLeads = RAW_LEADS;
+            if(selected !== 'all') filteredLeads = RAW_LEADS.filter(l => getMonthYearFromDate(l.data) === selected);
+
+            let filteredRepasse = RAW_REPASSE;
+            if(selected !== 'all') filteredRepasse = RAW_REPASSE.filter(r => getMonthYearFromDate(r[0]) === selected);
+
+            let filteredLiveStats = { presente: 0, ausente: 0, agendado: 0 };
+            let filteredLiveTimeline = {};
+            
+            STRUCT_LIVE_DATA.forEach(item => {
+                if(selected !== 'all') { if(getMonthYearFromDate(item.date) !== selected) return; }
+                const s = item.status.toLowerCase();
+                if (s === 'presente') filteredLiveStats.presente++;
+                if (s === 'ausente') filteredLiveStats.ausente++;
+                if (s === 'agendado') filteredLiveStats.agendado++;
+                const matchTimeline = item.date.match(/(\d{2}\/\d{2})/);
+                if(matchTimeline) filteredLiveTimeline[matchTimeline[1]] = (filteredLiveTimeline[matchTimeline[1]] || 0) + 1;
+            });
+
+            updateDashboard(filteredLeads, filteredLiveStats, filteredLiveTimeline);
+            
+            const repasseWithHeader = [RAW_REPASSE_HEADER, ...filteredRepasse];
+            renderRepasseTable(repasseWithHeader);
+            updateRepasseChart(repasseWithHeader);
+        }
+
+        async function fetchData() {
+            try {
+                const [resLeads, resLive, resRepasse] = await Promise.all([
+                    fetch(LEADS_URL).then(r => r.text()),
+                    LIVE_SHEET_URL ? fetch(LIVE_SHEET_URL).then(r => r.text()) : Promise.resolve(""),
+                    fetch(REPASSE_URL).then(r => r.text())
+                ]);
+
+                const rowsRepasse = parseCSV(resRepasse);
+                RAW_REPASSE_HEADER = rowsRepasse[0];
+                RAW_REPASSE = rowsRepasse.slice(1); 
+
+                const rowsLeads = parseCSV(resLeads);
+                const headers = rowsLeads[0].map(h => h.toUpperCase().trim());
+                
+                const IDX = {
+                    DATA: headers.findIndex(h => h.includes("DATA")),
+                    NOME: headers.findIndex(h => h.includes("NOME")),
+                    STATUS_CVC: headers.findIndex(h => h.includes("STATUS COM A CVC") || h === "STATUS"),
+                    CIDADE: headers.findIndex(h => h.includes("CIDADE")),
+                    STATUS_K: 11, 
+                    STATUS_COLS: []
+                };
+
+                headers.forEach((h, i) => { if (h.includes("TENTATIVA")) IDX.STATUS_COLS.push(i); });
+                
+                if(IDX.DATA === -1) IDX.DATA = 0;
+                if(IDX.NOME === -1) IDX.NOME = 1; // Coluna B
+                if(IDX.STATUS_CVC === -1) IDX.STATUS_CVC = 2; // Coluna C
+                if(IDX.CIDADE === -1) IDX.CIDADE = 5; 
+                if(IDX.STATUS_COLS.length === 0) IDX.STATUS_COLS = [12,13,14,15,16];
+
+                RAW_LEADS = rowsLeads.slice(1).map(cols => {
+                    if(cols.length < 5 || !cols[IDX.DATA].match(/\d/)) return null;
+                    
+                    let finalStatus = "SEM RESPOSTA";
+                    let foundMeaningful = false;
+                    for (let colIndex of IDX.STATUS_COLS) {
+                        const val = (cols[colIndex] || "").toUpperCase().trim();
+                        if (!val || val === "-" || val === "") continue;
+                        if (val.includes("BANT") || val.includes("QUALIFICADO")) { finalStatus = val; foundMeaningful = true; break; }
+                        if (val.includes("PARTICIPOU") || val.includes("AGENDADA") || val.includes("CONTATADO")) { finalStatus = val; foundMeaningful = true; }
+                        if (!foundMeaningful && !val.includes("SEM RESPOSTA")) { finalStatus = val; }
+                    }
+
+                    let statusK = (cols[IDX.STATUS_K] || "");
+                    if(!statusK && cols.length > 10) statusK = cols[cols.length-2];
+                    statusK = statusK.toUpperCase().trim();
+                    if (statusK === "") statusK = "ATIVO"; 
+                    
+                    // Pega o valor da NOVA COLUNA e limpa
+                    let statusCVCValue = (cols[IDX.STATUS_CVC] || "").trim();
+                    
+                    const rawName = (cols[IDX.NOME] || "Sem Nome").trim();
+                    const rawCity = cols[IDX.CIDADE] || "";
+                    
+                    return { 
+                        data: cols[IDX.DATA],
+                        nome: rawName,
+                        cidade: rawCity, 
+                        status: finalStatus, 
+                        statusK: statusK,
+                        statusCVC: statusCVCValue 
+                    };
+                }).filter(i => i !== null);
+
+                if(resLive) {
+                    const rowsLive = parseCSV(resLive);
+                    let currentLiveDate = null;
+                    STRUCT_LIVE_DATA = [];
+                    rowsLive.forEach(row => {
+                        const rowString = row.join(' ');
+                        if (rowString.match(/\d{2}\/\d{2}\/\d{4}/)) {
+                            const match = rowString.match(/(\d{2}\/\d{2}\/\d{4})/);
+                            if(match) currentLiveDate = match[1]; return; 
+                        }
+                        if(currentLiveDate) {
+                            const statusCell = row.find(c => c && (c.toLowerCase() === 'presente' || c.toLowerCase() === 'ausente' || c.toLowerCase() === 'agendado'));
+                            if (statusCell) STRUCT_LIVE_DATA.push({ date: currentLiveDate, status: statusCell });
+                        }
+                    });
+                }
+                populateMonthFilter();
+                applyDateFilter(); 
+
+            } catch(e) { console.error(e); showError("Erro ao carregar dados."); }
+        }
+
+        function renderRepasseTable(data) {
+            const tableHead = document.querySelector("#tabela-repasse thead");
+            const tableBody = document.querySelector("#tabela-repasse tbody");
+            const headers = data[0];
+            tableHead.innerHTML = `<tr>${headers.map(h => `<th style="padding: 12px; border-bottom: 2px solid #333; color: white;">${h}</th>`).join('')}</tr>`;
+            tableBody.innerHTML = data.slice(1).map(row => {
+                if(row.length < 1 || !row[0]) return '';
+                return `<tr style="border-bottom: 1px solid #222;">${row.map(cell => `<td style="padding: 12px; color: var(--text-muted);">${cell}</td>`).join('')}</tr>`;
+            }).join('');
+            document.getElementById('total-repasse').innerText = `${data.length - 1} Registros`;
+        }
+
+        function filtrarTabelaRepasse() {
+            const input = document.getElementById("filtroRepasse");
+            const filter = input.value.toUpperCase();
+            const table = document.getElementById("tabela-repasse");
+            const tr = table.getElementsByTagName("tr");
+            for (let i = 0; i < tr.length; i++) {
+                let txtValue = tr[i].textContent || tr[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) tr[i].style.display = ""; else tr[i].style.display = "none";
+            }
+        }
+
+        function updateRepasseChart(data) {
+            const headers = data[0].map(h => h.toUpperCase().trim());
+            let mgrIndex = headers.findIndex(h => h.includes("GERENTE REGIONAL MASTER FRANQUEADO"));
+            if (mgrIndex === -1) mgrIndex = headers.findIndex(h => h.includes("GERENTE REGIONAL") || h.includes("GERENTE"));
+            if (mgrIndex === -1) mgrIndex = 1; 
+
+            const rows = data.slice(1);
+            const counts = {};
+            rows.forEach(r => {
+                if(!r[0]) return;
+                const rawName = r[mgrIndex] ? r[mgrIndex].trim() : "N/D";
+                const name = rawName === "" ? "N/D" : rawName;
+                counts[name] = (counts[name] || 0) + 1;
+            });
+            const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 10);
+            chartRepasseOverview.data.labels = sorted.map(i => i[0]);
+            chartRepasseOverview.data.datasets[0].data = sorted.map(i => i[1]);
+            chartRepasseOverview.update();
+        }
+
+        // --- FUNÇÃO DE RENDERIZAR TABELA CVC (NOVA) ---
+        function renderStatusCVCTable(leads) {
+            const tbody = document.querySelector("#tabela-cvc tbody");
+            // Filtra removendo vazios e nulos
+            const filtered = leads.filter(l => l.statusCVC !== "" && l.statusCVC !== "Não Preenchido" && l.statusCVC !== "Vazio");
+
+            tbody.innerHTML = filtered.map(l => `
+                <tr style="border-bottom: 1px solid #222;">
+                    <td style="padding: 12px; color: var(--text-muted);">${l.data}</td>
+                    <td style="padding: 12px; color: white; font-weight:bold;">${l.nome}</td>
+                    <td style="padding: 12px; color: var(--text-muted);">${l.cidade}</td>
+                    <td style="padding: 12px;"><span class="mini-badge" style="background: #ffd700; color: #000;">${l.statusCVC}</span></td>
+                </tr>
+            `).join('');
+            
+            // Se quiser mostrar mensagem de vazio:
+            if(filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="padding: 20px; text-align: center; color: #666;">Nenhum lead com status CVC preenchido encontrado neste período.</td></tr>`;
+            }
+        }
+
+        function updateDashboard(leads, liveStats, liveTimeline) {
+            // 1. Cálculos existentes
+            const k_ativos = leads.filter(l => l.statusK === "ATIVO").length; 
+            const k_qualificados = leads.filter(l => l.statusK.includes("QUALIFICADO")).length;
+            const k_inativos = leads.filter(l => l.statusK.includes("INATIVO") || l.statusK.includes("DESATIVAR")).length;
+
+            // 2. NOVOS CÁLCULOS (Adicionados)
+            // Filtra quem tem "AGENDADA" ou "REUNIÃO" no status
+            const k_agendados = leads.filter(l => l.status.includes("AGENDADA") || l.status.includes("REUNIÃO")).length;
+            // Filtra quem tem "SEM RESPOSTA" no status
+            const k_sem_resposta = leads.filter(l => l.status.includes("SEM RESPOSTA")).length;
+
+            // 3. Atualiza o Gráfico de Torta com 5 dados agora
+            chartQualidade.data.datasets[0].data = [k_ativos, k_qualificados, k_agendados, k_sem_resposta, k_inativos];
+            chartQualidade.update();
+
+            // --- Restante do código original (não alterado) ---
+            const bant4_total = leads.filter(l => l.status.includes('BANT') || l.status.includes('QUALIFICADO')).length;
+            document.getElementById('kpi-bant-mini').innerText = `${bant4_total} BANT4`;
+
+            const cityCount = {};
+            leads.forEach(l => { if(l.cidade) cityCount[l.cidade] = (cityCount[l.cidade]||0)+1; });
+            const topCities = Object.entries(cityCount).sort((a,b)=>b[1]-a[1]).slice(0,5);
+            chartCidades.data.labels = topCities.map(c=>c[0]);
+            chartCidades.data.datasets[0].data = topCities.map(c=>c[1]);
+            chartCidades.update();
+
+            chartReuniao.data.labels = ['Presente', 'Agendado', 'Ausente'];
+            chartReuniao.data.datasets[0].backgroundColor = ['#00c853', '#0D47A1', '#d32f2f']; 
+            chartReuniao.data.datasets[0].data = [liveStats.presente, liveStats.agendado, liveStats.ausente];
+            chartReuniao.update();
+
+            const contatado = leads.filter(l => l.status.includes('CONTATADO')).length;
+            const semResp = leads.filter(l => l.status.includes('SEM RESPOSTA')).length;
+            chartLive.data.datasets[0].data = [semResp, contatado, bant4_total, liveStats.presente];
+            chartLive.update();
+
+            const dates = {};
+            leads.forEach(l => { 
+                let dStr = l.data.trim();
+                const parts = dStr.split(' ')[0].split('/'); 
+                if(parts.length >= 2) {
+                    const displayKey = `${parts[0]}/${parts[1]}`;
+                    dates[displayKey] = (dates[displayKey]||0) + 1;
+                }
+            });
+            const labels = Object.keys(dates).sort((a, b) => {
+                const [d1, m1] = a.split('/'); const [d2, m2] = b.split('/');
+                return (parseInt(m1)*100 + parseInt(d1)) - (parseInt(m2)*100 + parseInt(d2));
+            });
+            chartLeadsTimeline.data.labels = labels;
+            chartLeadsTimeline.data.datasets[0].data = labels.map(d=>dates[d]);
+            chartLeadsTimeline.update();
+
+            renderStatusCVCTable(leads);
+
+            const liveLabels = Object.keys(liveTimeline).sort((a, b) => {
+                const [d1, m1] = a.split('/'); const [d2, m2] = b.split('/');
+                return (parseInt(m1)*100 + parseInt(d1)) - (parseInt(m2)*100 + parseInt(d2));
+            });
+            chartLivesTimeline.data.labels = liveLabels;
+            chartLivesTimeline.data.datasets[0].data = liveLabels.map(d => liveTimeline[d] || 0);
+            chartLivesTimeline.update();
+
+            if(map) {
+                map.eachLayer(l => { if(l.options.icon) map.removeLayer(l); });
+                for(const [cidade, qtd] of Object.entries(cityCount)) {
+                    const clean = cidade.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    const coords = COORDENADAS[clean];
+                    if(coords) L.marker(coords, { icon: L.divIcon({ className: 'custom-pin', iconSize:[14,14] }) }).addTo(map).bindPopup(`<b>${cidade}</b><br>${qtd} Leads`);
+                }
+            }
+        }
+
+        function initCharts() {
+            Chart.defaults.color = '#8c8c8c'; Chart.defaults.font.family = 'Inter'; Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
+            
+            // --- ATUALIZAÇÃO AQUI ---
+            chartQualidade = new Chart(document.getElementById('chartQualidade'), {
+                type: 'pie', 
+                data: { 
+                    // Adicionei 'Agendados' e 'Sem Resposta' nas labels
+                    labels: ['Ativos', 'Qualificados', 'Agendados', 'Sem Resposta', 'Inativos'], 
+                    datasets: [{ 
+                        data: [0, 0, 0, 0, 0], 
+                        // Adicionei Azul (#0D47A1) para Agendado e Laranja (#FF9800) para Sem Resposta
+                        backgroundColor: ['#ff1f2d', '#00c853', '#0D47A1', '#FF9800', '#333333'], 
+                        borderWidth: 0 
+                    }] 
+                },
+                options: { 
+                    maintainAspectRatio: false, 
+                    plugins: { 
+                        legend: { 
+                            position: 'right', 
+                            labels: { boxWidth: 10, usePointStyle: true, color: '#fff' } 
+                        } 
+                    } 
+                }
+            });
+            // ------------------------
+
+            const ctxCid = document.getElementById('chartCidades').getContext('2d');
+            const grad = ctxCid.createLinearGradient(0,0,0,300); grad.addColorStop(0,'#ff1f2d'); grad.addColorStop(1,'#600000');
+            chartCidades = new Chart(ctxCid, { type: 'bar', data: { labels: [], datasets: [{ label: 'Leads', data: [], backgroundColor: grad, borderRadius: 6, barThickness: 25 }] }, options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { grid: { display: false } } } } });
+            
+            chartReuniao = new Chart(document.getElementById('chartReuniao'), { type: 'pie', data: { labels: ['Presente', 'Agendado', 'Ausente'], datasets: [{ data: [0,0,0], backgroundColor: ['#00c853', '#0D47A1', '#d32f2f'], borderWidth: 0 }] }, options: { maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 10, usePointStyle: true, color: '#fff' } } } } });
+            
+            chartLive = new Chart(document.getElementById('chartLive'), { type: 'bar', indexAxis: 'y', data: { labels: ['SEM RESP', 'CONTATADO', 'BANT4', 'PARTICIPOU'], datasets: [{ data: [0,0,0,0], backgroundColor: ['#ff1f2d', '#ffd700', '#00c853', '#00c853'], borderRadius: 4 }] }, options: { maintainAspectRatio: false, plugins: { legend: { display: false } } } });
+
+            const commonLineOptions = { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { color: '#222' } }, y: { grid: { color: '#222' }, beginAtZero: true } } };
+            chartLeadsTimeline = new Chart(document.getElementById('chartLeadsTimeline'), { type: 'line', data: { datasets: [{ label: 'Novos Leads', data: [], borderColor: '#ff1f2d', backgroundColor: 'rgba(255, 31, 45, 0.1)', fill: true, tension: 0.4 }] }, options: commonLineOptions });
+            chartLivesTimeline = new Chart(document.getElementById('chartLivesTimeline'), { type: 'line', data: { datasets: [{ label: 'Cadastros Live', data: [], borderColor: '#ffd700', backgroundColor: 'rgba(255, 215, 0, 0.1)', fill: true, tension: 0.4 }] }, options: commonLineOptions });
+        
+            chartRepasseOverview = new Chart(document.getElementById('chartRepasseOverview'), {
+                type: 'bar',
+                data: { labels: [], datasets: [{ label: 'Volume de Repasses', data: [], backgroundColor: '#ff1f2d', borderRadius: 5, barThickness: 30 }] },
+                options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#222' } }, x: { grid: { display: false } } } }
+            });
+        }
+
+        function initMap() { 
+            if(!map) { 
+                map = L.map('map').setView([-14.235, -51.925], 4); 
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                    attribution: '&copy; OpenStreetMap &copy; CARTO',
+                    subdomains: 'abcd',
+                    maxZoom: 19
+                }).addTo(map); 
+            } 
+        } 
+    </script>
+</body>
+</html>
