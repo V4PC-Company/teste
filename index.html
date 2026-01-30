@@ -24,6 +24,8 @@
             --cvc-neon-yellow: #ffd700;
             --status-green: #00c853;
             --status-blue-dark: #0D47A1; 
+            --status-purple: #d0b0ff; /* Cor Congelado */
+            --status-cyan: #a8dadc;   /* Cor Nutrição */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -496,16 +498,14 @@
             const k_inativos = leads.filter(l => l.statusK.includes("INATIVO") || l.statusK.includes("DESATIVAR")).length;
 
             // 2. NOVOS CÁLCULOS (Adicionados)
-            // Filtra quem tem "AGENDADA" ou "REUNIÃO" no status
             const k_agendados = leads.filter(l => l.status.includes("AGENDADA") || l.status.includes("REUNIÃO")).length;
-            // Filtra quem tem "SEM RESPOSTA" no status
-            const k_sem_resposta = leads.filter(l => l.status.includes("SEM RESPOSTA")).length;
+            const k_congelado = leads.filter(l => l.statusK.includes("CONGELADO") || l.status.includes("CONGELADO")).length;
+            const k_nutricao = leads.filter(l => l.statusK.includes("NUTRIÇÃO") || l.status.includes("NUTRIÇÃO")).length;
 
-            // 3. Atualiza o Gráfico de Torta com 5 dados agora
-            chartQualidade.data.datasets[0].data = [k_ativos, k_qualificados, k_agendados, k_sem_resposta, k_inativos];
+            // 3. Atualiza o Gráfico de Torta (Removido Sem Resposta, Add Congelado/Nutrição)
+            chartQualidade.data.datasets[0].data = [k_ativos, k_qualificados, k_agendados, k_congelado, k_nutricao, k_inativos];
             chartQualidade.update();
 
-            // --- Restante do código original (não alterado) ---
             const bant4_total = leads.filter(l => l.status.includes('BANT') || l.status.includes('QUALIFICADO')).length;
             document.getElementById('kpi-bant-mini').innerText = `${bant4_total} BANT4`;
 
@@ -521,9 +521,9 @@
             chartReuniao.data.datasets[0].data = [liveStats.presente, liveStats.agendado, liveStats.ausente];
             chartReuniao.update();
 
+            // GRÁFICO 2 (Funil): Removido Sem Resp, Adicionado Congelado e Nutrição
             const contatado = leads.filter(l => l.status.includes('CONTATADO')).length;
-            const semResp = leads.filter(l => l.status.includes('SEM RESPOSTA')).length;
-            chartLive.data.datasets[0].data = [semResp, contatado, bant4_total, liveStats.presente];
+            chartLive.data.datasets[0].data = [contatado, bant4_total, k_congelado, k_nutricao, liveStats.presente];
             chartLive.update();
 
             const dates = {};
@@ -566,16 +566,14 @@
         function initCharts() {
             Chart.defaults.color = '#8c8c8c'; Chart.defaults.font.family = 'Inter'; Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
             
-            // --- ATUALIZAÇÃO AQUI ---
+            // --- ATUALIZAÇÃO CHART 1 (TORTA) ---
             chartQualidade = new Chart(document.getElementById('chartQualidade'), {
                 type: 'pie', 
                 data: { 
-                    // Adicionei 'Agendados' e 'Sem Resposta' nas labels
-                    labels: ['Ativos', 'Qualificados', 'Agendados', 'Sem Resposta', 'Inativos'], 
+                    labels: ['Ativos', 'Qualificados', 'Agendados', 'Congelado', 'Nutrição', 'Inativos'], 
                     datasets: [{ 
-                        data: [0, 0, 0, 0, 0], 
-                        // Adicionei Azul (#0D47A1) para Agendado e Laranja (#FF9800) para Sem Resposta
-                        backgroundColor: ['#ff1f2d', '#00c853', '#0D47A1', '#FF9800', '#333333'], 
+                        data: [0, 0, 0, 0, 0, 0], 
+                        backgroundColor: ['#ff1f2d', '#00c853', '#0D47A1', '#E1BEE7', '#B2DFDB', '#333333'], 
                         borderWidth: 0 
                     }] 
                 },
@@ -589,7 +587,6 @@
                     } 
                 }
             });
-            // ------------------------
 
             const ctxCid = document.getElementById('chartCidades').getContext('2d');
             const grad = ctxCid.createLinearGradient(0,0,0,300); grad.addColorStop(0,'#ff1f2d'); grad.addColorStop(1,'#600000');
@@ -597,7 +594,20 @@
             
             chartReuniao = new Chart(document.getElementById('chartReuniao'), { type: 'pie', data: { labels: ['Presente', 'Agendado', 'Ausente'], datasets: [{ data: [0,0,0], backgroundColor: ['#00c853', '#0D47A1', '#d32f2f'], borderWidth: 0 }] }, options: { maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 10, usePointStyle: true, color: '#fff' } } } } });
             
-            chartLive = new Chart(document.getElementById('chartLive'), { type: 'bar', indexAxis: 'y', data: { labels: ['SEM RESP', 'CONTATADO', 'BANT4', 'PARTICIPOU'], datasets: [{ data: [0,0,0,0], backgroundColor: ['#ff1f2d', '#ffd700', '#00c853', '#00c853'], borderRadius: 4 }] }, options: { maintainAspectRatio: false, plugins: { legend: { display: false } } } });
+            // --- ATUALIZAÇÃO CHART 2 (BARRAS) ---
+            chartLive = new Chart(document.getElementById('chartLive'), { 
+                type: 'bar', 
+                indexAxis: 'y', 
+                data: { 
+                    labels: ['CONTATADO', 'BANT4', 'CONGELADO', 'NUTRIÇÃO', 'PARTICIPOU'], 
+                    datasets: [{ 
+                        data: [0,0,0,0,0], 
+                        backgroundColor: ['#ffd700', '#00c853', '#E1BEE7', '#B2DFDB', '#00c853'], 
+                        borderRadius: 4 
+                    }] 
+                }, 
+                options: { maintainAspectRatio: false, plugins: { legend: { display: false } } } 
+            });
 
             const commonLineOptions = { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { color: '#222' } }, y: { grid: { color: '#222' }, beginAtZero: true } } };
             chartLeadsTimeline = new Chart(document.getElementById('chartLeadsTimeline'), { type: 'line', data: { datasets: [{ label: 'Novos Leads', data: [], borderColor: '#ff1f2d', backgroundColor: 'rgba(255, 31, 45, 0.1)', fill: true, tension: 0.4 }] }, options: commonLineOptions });
