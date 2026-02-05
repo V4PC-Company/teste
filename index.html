@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nobile Hotels - Soluciones</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
 <style type="text/css">
   /* ================= GLOBALS ================= */
   body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -174,9 +177,9 @@
     .whatsapp1 h3 { font-size: 26px; }
   }
 
-  /* ================= NOVA SEÇÃO: SOLUÇÕES + CURVA ================= */
+  /* ================= SEÇÃO SOLUCIONES + CURVA ================= */
   .solucoes-section {
-      background-color: #f8f9fa; /* Fundo cinza claro para destacar a curva branca */
+      background-color: #f8f9fa; /* Fundo cinza suave */
       padding-top: 80px;
       position: relative;
       overflow: hidden;
@@ -227,6 +230,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      padding: 20px; /* Espaço para a rotação não cortar */
   }
 
   /* Fundo Azul Inclinado */
@@ -236,23 +240,23 @@
       height: 95%;
       background-color: #142F5C;
       z-index: 1;
-      transform: rotate(-4deg);
+      transform: rotate(3deg); /* Inclinado para direita */
       border-radius: 4px;
       right: 0;
       top: 10px;
-      box-shadow: 10px 10px 20px rgba(0,0,0,0.15);
+      box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
   }
 
   /* Foto Principal */
   .main-photo {
       position: relative;
       z-index: 2;
-      width: 90%;
+      width: 95%;
       height: auto;
       border-radius: 4px;
-      transform: rotate(2deg);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      border: 5px solid #fff;
+      transform: rotate(-3deg); /* Inclinado para esquerda (contrário ao azul) */
+      box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+      border: 8px solid #fff; /* Borda branca grossa estilo foto */
   }
 
   /* A CURVA SVG */
@@ -305,7 +309,7 @@
     padding: 60px 20px;
     background-color: #fff; /* Fundo branco conectando com a curva */
     max-width: 1200px;
-    margin: 0 auto; /* Removido margem superior para colar na curva */
+    margin: 0 auto; 
     overflow: hidden;
   }
   .secao-modelos-nobile .texto-container-especifico {
@@ -351,6 +355,12 @@
     border-radius: 20px;
     overflow: hidden;
   }
+  .carousel-modelos-container .swiper-slide {
+      /* Garante que o slide ocupe o espaço correto */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
   .carousel-modelos-container .swiper-slide img {
     width: 100% !important;
     height: 100% !important;
@@ -366,6 +376,12 @@
     border-radius: 50%;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   }
+  .secao-modelos-nobile .swiper-button-next:after,
+  .secao-modelos-nobile .swiper-button-prev:after {
+      font-size: 20px;
+      font-weight: bold;
+  }
+
   @media (max-width: 991px) {
     .secao-modelos-nobile {
       flex-direction: column;
@@ -498,7 +514,7 @@
 
         <div class="solucoes-image-wrapper">
             <div class="blue-backdrop"></div>
-            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Recepción del Hotel" class="main-photo">
+            <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=1000&auto=format&fit=crop" alt="Resort y Piscina" class="main-photo">
         </div>
 
     </div>
@@ -519,9 +535,9 @@
    
   <div class="swiper carousel-modelos-container">
     <div class="swiper-wrapper">
-      <div class="swiper-slide"><img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Fachada-Hotel-Nobile-1.png"></div>
-      <div class="swiper-slide"><img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Selo-Hotel-Nobile.png"></div>
-      <div class="swiper-slide"><img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Quarto-Hotel-Nobile.png"></div>
+      <div class="swiper-slide"><img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Fachada-Hotel-Nobile-1.png" alt="Fachada"></div>
+      <div class="swiper-slide"><img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Selo-Hotel-Nobile.png" alt="Selo"></div>
+      <div class="swiper-slide"><img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Quarto-Hotel-Nobile.png" alt="Quarto"></div>
     </div>
     <div class="swiper-button-next"></div>
     <div class="swiper-button-prev"></div>
@@ -583,11 +599,12 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. Script dos Contadores
+  
+  // --- Script dos Contadores ---
   const counters = document.querySelectorAll('.count');
   const defaultDuration = 1200;
 
-  function formatNumber(n) { return n.toLocaleString('es-ES'); } // Formato espanhol
+  function formatNumber(n) { return n.toLocaleString('es-ES'); }
 
   function animateCount(counter, duration = defaultDuration) {
     const target = Number(counter.getAttribute('data-target')) || 0;
@@ -622,7 +639,7 @@ document.addEventListener("DOMContentLoaded", () => {
     observer.observe(c);
   });
 
-  // 2. Script do Slider/Carrossel de Modelos
+  // --- Script do Slider/Carrossel ---
   const dadosModelos = [
     {
       titulo: "ADMINISTRACIÓN",
@@ -644,7 +661,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const swiperModelos = new Swiper(".carousel-modelos-container", {
     loop: true,
     slidesPerView: 1,
-    autoplay: false, 
+    centeredSlides: true,
+    spaceBetween: 20,
     navigation: {
       nextEl: ".swiper-button-next",
       prevEl: ".swiper-button-prev",
