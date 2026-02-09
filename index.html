@@ -17,7 +17,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
         }
         
-        /* Container interno para limitar a largura do conteúdo, mas não o fundo */
+        /* Container interno para limitar a largura do conteúdo */
         .container-padrao {
             width: 100%;
             max-width: 1600px;
@@ -26,19 +26,26 @@
         }
 
         /* =========================================
-           BANNER TOPO
+           BANNER TOPO - ARREDONDADO EMBAIXO ("U" INVERTIDO)
            ========================================= */
         .banner_topo {
             width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 100px 0; /* Padding vertical apenas */
+            padding: 100px 0 120px 0; /* Padding extra embaixo para compensar a curva */
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             background-image: url("https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/bnn-lp-nobile.jpg");
             position: relative;
+            
+            /* AQUI ESTÁ O EFEITO DE "U" INVERTIDO */
+            border-bottom-left-radius: 100px;
+            border-bottom-right-radius: 100px;
+            /* Sombra para destacar a curva sobre o fundo */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            z-index: 2;
         }
         
         .banner_topo .content-flex {
@@ -69,7 +76,7 @@
         /* Form arredondado */
         .form-box-topo {
             width: 400px; max-width: 100%; background: #fff; padding: 35px;
-            border-radius: 25px; /* Bem arredondado */
+            border-radius: 30px; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
             z-index: 10;
         }
@@ -80,7 +87,7 @@
         .form-box-topo label { font-size: 13px; color: #1b3b6f; font-weight: 700; margin-bottom: -10px; display: block; text-align: left; }
         .form-box-topo input, .form-box-topo select {
             width: 100%; padding: 12px; border: 1px solid #ddd; 
-            border-radius: 12px; /* Input arredondado */
+            border-radius: 12px;
             font-size: 14px; color: #333; outline: none; transition: border 0.3s;
         }
         .form-box-topo input:focus, .form-box-topo select:focus {
@@ -89,7 +96,7 @@
 
         .btn-orange {
             background-color: #F37021; color: #fff; border: none; padding: 15px; font-size: 16px; font-weight: bold;
-            border-radius: 12px; /* Botão arredondado */
+            border-radius: 12px;
             cursor: pointer; margin-top: 10px; text-transform: uppercase; transition: transform 0.3s, background 0.3s;
             box-shadow: 0 4px 10px rgba(243, 112, 33, 0.4);
         }
@@ -97,8 +104,11 @@
 
         @media (max-width: 991px) {
             .banner_topo {
-                padding: 60px 0;
+                padding: 60px 0 80px 0;
                 background-image: url("https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/12/bnn-lp-nobile-responsivo.png"); 
+                /* Menos curva no mobile para não perder espaço */
+                border-bottom-left-radius: 50px;
+                border-bottom-right-radius: 50px;
             }
             .banner_topo .content-flex { flex-direction: column; text-align: center; }
             .banner_topo .texto-banner { text-align: center; padding-right: 0; margin-bottom: 20px; }
@@ -107,11 +117,11 @@
         }
 
         /* =========================================
-           SOLUÇÕES (Background Branco Total)
+           SOLUÇÕES
            ========================================= */
         .solu-empresa {
-            background: #fff; 
-            width: 100%; /* Tela inteira */
+            background: #f9f9f9; /* Fundo igual ao body para destacar a curva do banner */
+            width: 100%; 
             padding: 80px 0;
             position: relative;
         }
@@ -124,8 +134,8 @@
             width: 40%; min-width: 300px; height: 500px;
             background-size: cover; background-position: center; background-repeat: no-repeat;
             background-image: url("https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/img-lp-nobile.png");
-            border-radius: 30px; /* Imagem bem arredondada */
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 40px; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
         }
         
         .solu-empresa h2 { color: #1b3b6f; font-size: 42px; margin-bottom: 20px; font-weight: 800; text-align: left; }
@@ -141,34 +151,49 @@
         }
 
         /* =========================================
-           CONTADORES (Faixa Azul Total)
+           CONTADORES - FORMATO DE CÁPSULA
            ========================================= */
         .whatsapp1 {
-            width: 100%; /* Tela inteira */
-            padding: 80px 0; 
+            /* Largura controlada para fazer o efeito flutuante/cápsula */
+            width: 92%; 
+            max-width: 1500px;
+            margin: 0 auto; /* Centraliza a cápsula */
+            padding: 70px 40px; 
+            
             background: linear-gradient(135deg, #2A7FA1, #26377F);
-            margin: 0;
+            
+            /* AQUI ESTÁ O EFEITO DE CÁPSULA */
+            border-radius: 100px; 
+            
+            box-shadow: 0 20px 50px rgba(38, 55, 127, 0.3);
+            position: relative;
+            z-index: 5;
         }
         .whatsapp1 .area_flex {
             display: flex; flex-flow: row wrap; justify-content: space-around;
             align-items: center; text-align: center; gap: 40px;
         }
-        .whatsapp1 .caixa { flex: 1; min-width: 250px; transition: transform 0.3s ease; }
+        .whatsapp1 .caixa { flex: 1; min-width: 200px; transition: transform 0.3s ease; }
         .whatsapp1 .caixa:hover { transform: scale(1.05); }
         .whatsapp1 h3 { color: #fff; font-size: 52px; font-weight: 800; margin-bottom: 5px; margin-top: 0; }
-        .whatsapp1 p { color: #e0e0e0; font-size: 18px; line-height: 1.4; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+        .whatsapp1 p { color: #e0e0e0; font-size: 16px; line-height: 1.4; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
         
         @media (max-width: 991px) {
-            .whatsapp1 { padding: 60px 0; }
+            .whatsapp1 { 
+                width: 95%; 
+                padding: 50px 20px; 
+                /* No mobile, reduzimos o arredondamento para aproveitar espaço interno */
+                border-radius: 40px; 
+            }
             .whatsapp1 .area_flex { flex-direction: column; gap: 40px; }
             .whatsapp1 h3 { font-size: 40px; }
         }
 
         /* =========================================
-           TRÊS ITENS LADO A LADO (Background Cinza Claro)
+           TRÊS ITENS LADO A LADO
            ========================================= */
         .section-solutions {
-            width: 100%; /* Tela Inteira */
+            width: 100%; 
             padding: 80px 0;
             background-color: #f9f9f9;
         }
@@ -185,7 +210,7 @@
             flex: 1;
             background: #fff;
             padding: 0 0 30px 0;
-            border-radius: 30px; /* Card Arredondado */
+            border-radius: 30px; 
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             overflow: hidden;
@@ -205,7 +230,6 @@
             width: 100%;
             height: 250px;
             object-fit: cover;
-            /* A imagem já pega o arredondamento do card pai no topo */
         }
         
         .card-content {
@@ -235,7 +259,7 @@
 
         .btn-azul {
             display: inline-block; background-color: #1b3b6f; color: #fff; padding: 20px 60px;
-            border-radius: 50px; /* Botão estilo pílula bem arredondado */
+            border-radius: 50px; /* Botão estilo pílula */
             text-decoration: none; font-weight: 700; font-size: 18px;
             text-transform: uppercase; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(27, 59, 111, 0.3);
         }
@@ -253,10 +277,11 @@
             width: 100%;
             padding: 60px 0;
             background: #fff;
+            margin-top: 40px;
         }
         .logo-flex {
             display: flex; justify-content: space-between; align-items: center; flex-wrap: nowrap; gap: 20px;
-            overflow-x: auto; /* Permite scroll horizontal em telas muito pequenas se necessário */
+            overflow-x: auto; 
         }
         .logo-flex .logo-item { flex: 1; display: flex; justify-content: center; align-items: center; min-width: 120px; }
         .logo-flex img { width: 100%; max-width: 150px; height: auto; transition: transform 0.3s ease; filter: grayscale(100%); opacity: 0.7; }
@@ -491,11 +516,9 @@
                         const target = +counter.getAttribute('data-target');
                         
                         const updateCount = () => {
-                            // Remove pontos para calcular, se já houver texto formatado
                             const currentText = counter.innerText.replace(/\./g, '');
                             const count = +currentText;
                             
-                            // Define um incremento proporcional ao alvo para que todos terminem em tempo similar
                             const inc = target / speed;
 
                             if (count < target) {
@@ -507,13 +530,13 @@
                         };
                         
                         updateCount();
-                        observer.unobserve(counter); // Para de observar após animar
+                        observer.unobserve(counter);
                     }
                 });
             };
 
             const observer = new IntersectionObserver(animateCounters, {
-                threshold: 0.5 // Aciona quando 50% do elemento estiver visível
+                threshold: 0.5
             });
 
             counters.forEach(counter => {
