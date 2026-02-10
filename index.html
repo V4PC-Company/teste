@@ -1,537 +1,110 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nobile Hotels & Resorts</title>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" type="text/javascript">
+
+  
+  
+  
+  
+  
+
+  </script>
+  <script>
+
+dmAPI.runOnReady('omCheckIfHome',function() {if ( window.location.pathname == '/' || Parameters.IsCurrentHomePage ){} else if ($.DM.insideEditor() && Parameters.IsCurrentHomePage) {document.write('  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> ');}});
+  
     
-    <style type="text/css">
-        /* =========================================
-           ESTILOS GERAIS E RESET
-           ========================================= */
-        * { box-sizing: border-box; }
-        
-        body { 
-            margin: 0; 
-            padding: 0; 
-            overflow-x: hidden; 
-            background-color: #f9f9f9; 
-            font-family: sans-serif; 
-        }
+  
+  
+  
+  
 
-        .conteudo-fluido {
-            width: 90%;       
-            max-width: 100%;  
-            margin: 0 auto;   
-        }
+  </script>
+  <style>
+    
+    
+    
+    
+    
+    
+    
+    @media screen and (min-width: 1200px) {.rows-1200 .dmRespDesignRow,.rows-1200 .dmRespRow:not(.fullBleedMode) .dmRespColsWrapper {max-width:1400px!important}}
+  
+    
+  
+  
+  
+  
+  
+  </style>
+  <style>
+    
+    
+    
+    
+    
+    
+    
+    .ui-sortable-handle {-ms-touch-action: auto!important;touch-action: auto!important;}
+  
+  
+  
+  
+  
+  
+  
+  </style>
+  <meta name="format-detection" content="telephone=no"/>
+  <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js">
+  
+  
+  
+  
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/1.0.10/datepicker.min.js" integrity="sha512-RCgrAvvoLpP7KVgTkTctrUdv7C6t7Un3p1iaoPr1++3pybCyCsCZZN7QEHMZTcJTmcJ7jzexTO+eFpHk4OCFAg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  
+  
+  
+  
+  
+  
+  
+  </script>-->  <link rel="stylesheet" type="text/css" href="https://cdn-prod.securiti.ai/consent/cookie-consent.css"/>
+  <script>
 
-        /* =========================================
-           BANNER TOPO
-           ========================================= */
-        .banner_topo {
-            width: 100vw;
-            margin-left: calc(50% - 50vw);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 80px 0;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-image: url("https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/bnn-lp-nobile.jpg");
-            position: relative;
-        }
-        
-        .banner_topo .container {
-            width: 90%; 
-            max-width: 100%;
-            margin: 0 auto;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 40px;
-        }
+    if (typeof dmAPI !== 'undefined') {
+        dmAPI.runOnReady('omCheckIfHome', function() {
+            // Lógica de verificação padrão mantida, mas sem injeção de scripts externos
+        });
+    }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
-        .banner_topo .texto-banner {
-            flex: 1;
-            min-width: 300px;
-            text-align: left;
-            color: #fff;
-            padding-right: 20px;
-        }
-        .banner_topo h1 {
-            color: #fff; font-size: 48px; margin-bottom: 20px; font-weight: bold; line-height: 1.2;
-        }
-        .banner_topo p {
-            color: #fff; font-size: 20px; line-height: 1.6; margin-bottom: 0;
-        }
-        .form-box-topo {
-            width: 400px; max-width: 100%; background: #fff; padding: 30px;
-            border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); z-index: 10;
-        }
-        .form-box-topo h3 {
-            color: #1b3b6f; font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 20px; line-height: 1.3;
-        }
-        .form-box-topo form { display: flex; flex-direction: column; gap: 12px; }
-        .form-box-topo label { font-size: 13px; color: #1b3b6f; font-weight: 700; margin-bottom: -5px; display: block; text-align: left; }
-        .form-box-topo input, .form-box-topo select {
-            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; color: #333;
-        }
-        .btn-orange {
-            background-color: #F37021; color: #fff; border: none; padding: 15px; font-size: 16px; font-weight: bold;
-            border-radius: 5px; cursor: pointer; margin-top: 10px; text-transform: uppercase; transition: background 0.3s;
-        }
-        .btn-orange:hover { background-color: #d35400; }
+  </script>
 
-        @media (max-width: 991px) {
-            .banner_topo {
-                padding: 60px 0;
-                background-image: url("https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/12/bnn-lp-nobile-responsivo.png"); 
-            }
-            .banner_topo .container { flex-direction: column; text-align: center; width: 90%; }
-            .banner_topo .texto-banner { text-align: center; padding-right: 0; margin-bottom: 20px; }
-            .banner_topo h1 { font-size: 32px; }
-            .form-box-topo { width: 100%; }
-        }
-
-        /* =========================================
-           SOLUÇÕES
-           ========================================= */
-        .solu-empresa {
-            width: 100vw;
-            margin-left: calc(50% - 50vw);
-            background: #fff; 
-            padding: 60px 0;
-            position: relative; z-index: 5;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-        }
-        .solu-empresa .area_flex {
-            width: 90%; 
-            max-width: 100%; 
-            margin: 0 auto;
-            display: flex; flex-flow: row wrap; justify-content: center; align-items: center; gap: 50px;
-        }
-        .solu-empresa .caixa { flex: 1; text-align: left; }
-        .solu-empresa .caixa1 {
-            width: 35%; min-width: 300px; padding: 0; height: 450px;
-            background-size: cover; background-position: center; background-repeat: no-repeat;
-            background-image: url("https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/img-lp-nobile.png");
-            border-radius: 20px;
-        }
-        .solu-empresa h2 { color: #1b3b6f; font-size: 40px; margin-bottom: 15px; font-weight: bold; text-align: left; }
-        .solu-empresa p { color: #333; font-size: 18px; line-height: 1.6; text-align: justify; }
-
-        @media (max-width: 991px) {
-            .solu-empresa .area_flex { flex-flow: column; align-items: center; width: 90%; }
-            .solu-empresa .caixa { width: 100%; padding: 0; text-align: center; }
-            .solu-empresa .caixa1 { width: 100%; min-height: 300px; }
-            .solu-empresa h2 { font-size: 28px; text-align: center; }
-            .solu-empresa p { text-align: center; font-size: 16px; }
-        }
-
-        /* =========================================
-           CONTADORES (Pílula)
-           ========================================= */
-        .whatsapp1 {
-            width: 90%; 
-            max-width: 100%; 
-            margin: 60px auto; 
-            border-radius: 100px;
-            padding: 40px 20px; 
-            background: linear-gradient(to right, #2A7FA1, #26377F);
-            position: relative;
-        }
-        .whatsapp1 .area_flex {
-            display: flex; flex-flow: row wrap; justify-content: space-around;
-            align-items: center; text-align: center; gap: 30px;
-            width: 100%;
-        }
-        .whatsapp1 .caixa { flex: 1; min-width: 250px; transition: transform 0.3s ease; }
-        .whatsapp1 .caixa:hover { transform: scale(1.08); }
-        .whatsapp1 h3 { color: #fff; font-size: 42px; font-weight: bold; margin-bottom: 10px; }
-        .whatsapp1 p { color: #fff; font-size: 18px; line-height: 1.4; font-weight: 400; }
-        
-        @media (max-width: 991px) {
-            .whatsapp1 { width: 90%; border-radius: 50px; padding: 40px 20px; }
-            .whatsapp1 .area_flex { flex-direction: column; gap: 25px; }
-            .whatsapp1 h3 { font-size: 32px; }
-        }
-
-        /* =========================================
-           NOVOS MODELOS (SUBSTITUI CARROSEL)
-           ========================================= */
-        .section-modelos {
-            width: 100vw;
-            margin-left: calc(50% - 50vw);
-            background-color: #fff;
-            padding: 60px 0;
-            display: flex; justify-content: center;
-        }
-
-        .container-modelos {
-            width: 90%;
-            max-width: 100%;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        /* Grid para as 3 colunas */
-        .grid-cards {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* Alinha no topo */
-            gap: 40px;
-            margin-bottom: 50px;
-            flex-wrap: wrap;
-        }
-
-        .card-item {
-            flex: 1;
-            min-width: 300px;
-            background: #fff;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: all 0.4s ease; /* Efeito suave de transição */
-            cursor: pointer;
-            padding-bottom: 20px;
-            border: 1px solid #eee;
-        }
-
-        /* O efeito HOVER solicitado */
-        .card-item:hover {
-            transform: translateY(-10px); /* Sobe 10px */
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15); /* Aumenta a sombra */
-        }
-
-        .card-item img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .card-content {
-            padding: 25px 20px;
-        }
-
-        .card-content h3 {
-            color: #1b3b6f;
-            font-size: 22px;
-            font-weight: 800;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            line-height: 1.3;
-        }
-
-        .card-content p {
-            font-size: 16px;
-            color: #555;
-            line-height: 1.5;
-            margin: 0;
-        }
-
-        /* Botão centralizado */
-        .btn-azul {
-            display: inline-block; 
-            background-color: #1b3b6f; 
-            color: #fff; 
-            padding: 18px 50px;
-            border-radius: 8px; 
-            text-decoration: none; 
-            font-weight: 700; 
-            font-size: 16px;
-            text-transform: uppercase; 
-            transition: all 0.3s ease; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-        }
-        .btn-azul:hover { 
-            background-color: #2a5298; 
-            transform: translateY(-2px); 
-        }
-
-        @media (max-width: 991px) {
-            .grid-cards { flex-direction: column; align-items: center; }
-            .card-item { width: 100%; max-width: 500px; }
-            .btn-azul { width: 100%; max-width: 400px; text-align: center; }
-        }
-
-        /* =========================================
-           LOGOS ESTÁTICOS
-           ========================================= */
-        .static-logos-container {
-            width: 100vw;
-            margin-left: calc(50% - 50vw);
-            margin-top: 60px; margin-bottom: 60px;
-            display: flex;
-            justify-content: center; align-items: center;
-        }
-        .static-logos-container .container-interno {
-             width: 90%; max-width: 100%; margin: 0 auto;
-             display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: nowrap;
-        }
-        .static-logos-container .logo-item { flex: 1; display: flex; justify-content: center; align-items: center; }
-        .static-logos-container img { width: 100%; max-width: 160px; height: auto; transition: transform 0.3s ease; }
-        .static-logos-container img:hover { transform: scale(1.08); }
-        
-        @media (max-width: 900px) {
-            .static-logos-container .container-interno { flex-wrap: wrap; justify-content: center; gap: 20px; }
-            .static-logos-container .logo-item { flex: 0 0 30%; }
-            .static-logos-container img { max-width: 150px; }
-        }
-        @media (max-width: 600px) {
-            .static-logos-container .logo-item { flex: 0 0 45%; }
-            .static-logos-container img { max-width: 140px; }
-        }
-
-        /* =========================================
-           FOOTER
-           ========================================= */
-        .footer-container {
-            width: 100vw;
-            margin-left: calc(50% - 50vw);
-            display: flex; justify-content: center; flex-wrap: wrap;
-            padding: 60px 0; 
-            background-color: #f9f9f9;
-        }
-        .footer-container .container-interno {
-             width: 90%; max-width: 100%; margin: 0 auto;
-             display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px;
-        }
-        .footer-box h3 { font-size: 22px; margin-bottom: 20px; font-weight: bold; color: #1a1a1a; }
-        .footer-box ul { list-style: none; padding: 0; margin: 0; }
-        .footer-box ul li { margin-bottom: 10px; }
-        .footer-box ul li a { text-decoration: none; color: #333; transition: 0.3s; }
-        .footer-box ul li a:hover { color: #0077ff; }
-        .social-icons img { width: 45px; margin-right: 10px; transition: 0.3s; }
-        .social-icons img:hover { transform: scale(1.1); }
-        .apoiamos-img { width: 200px; }
-        .footer-note { text-align: center; font-size: 14px; margin-top: 40px; max-width: 100%; color: #666; padding-bottom: 40px; width: 90%; margin-left: auto; margin-right: auto; }
-        
-        @media (max-width: 768px) {
-            .footer-container .container-interno .footer-box { width: 44%; }
-            .apoiamos-img { display: block; margin: 10px auto 0; max-width: 160px; }
-        }
-    </style>
-</head>
-<body>
-
-    <section class="banner_topo">
-        <div class="container">
-            <div class="texto-banner">
-                <h1>Impulse su hotel con Nobile Hotels & Resorts</h1>
-                <p>Maximice la rentabilidad de su hotel con la inteligencia de ventas de la 5.ª cadena más grande de Brasil.</p>
-            </div>
-            
-            <div class="form-box-topo">
-                <h3>Reciba un análisis gratuito del potencial comercial completando:</h3>
-                <form action="mailto:comercial@gruponobile.com.br" method="post" enctype="text/plain">
-                    <label>¿Cuál es el nombre de su hotel?</label>
-                    <input type="text" name="nombre_hotel" required>
-                    
-                    <label>¿En qué ciudad y estado se encuentra?</label>
-                    <input type="text" name="ubicacion" required>
-                    
-                    <label>¿Cuántas habitaciones posee su hotel?</label>
-                    <select name="num_habitaciones">
-                        <option value="Hasta 30">Hasta 30</option>
-                        <option value="31 a 50">31 a 50</option>
-                        <option value="51 a 100">51 a 100</option>
-                        <option value="Más de 100">Más de 100</option>
-                    </select>
-                    
-                    <label>Hoy, su principal dificultad es:</label>
-                    <select name="dificultad">
-                        <option value="Aumentar las ventas">Aumentar las ventas</option>
-                        <option value="Gestión operativa">Gestión operativa</option>
-                        <option value="Reducción de costos">Reducción de costos</option>
-                        <option value="Marketing">Marketing</option>
-                    </select>
-                    
-                    <label>Nombre completo</label>
-                    <input type="text" name="nombre_contacto" required>
-                    
-                    <label>Su e-mail profesional</label>
-                    <input type="email" name="email" required>
-                    
-                    <label>Su número de celular / WhatsApp</label>
-                    <input type="tel" name="telefono" required>
-                    
-                    <button type="submit" class="btn-orange">ENVIAR SOLICITUD</button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <section class="solu-empresa">
-        <div class="area_flex">
-            <div class="caixa">
-                <h2>Soluciones ideales para el éxito de su hotel</h2>
-                <p>Desde la gestión integral hasta la autonomía con respaldo: Nobile ofrece 4 modelos de alianza para <b>maximizar sus ingresos y valorizar su activo.</b><br><br>
-                Con 17 años de excelencia en el sector hotelero, Nobile Hotels & Resorts impulsa el alto rendimiento de su emprendimiento a través de equipos multidisciplinarios y acceso directo a los mayores canales de venta del mundo.</p>
-            </div>
-            <div class="caixa caixa1">
-                </div>
-        </div>
-    </section>
-
-    <section class="whatsapp1">
-        <div class="area_flex">
-            <div class="caixa">
-                <h3 class="counter-value" data-target="8000">0</h3>
-                <p>Habitaciones, la 5.ª cadena más grande de Brasil</p>
-            </div>
-            <div class="caixa">
-                <h3 class="counter-value" data-target="3000000">0</h3>
-                <p>Huéspedes satisfechos por año en 7 Países</p>
-            </div>
-            <div class="caixa">
-                <h3 class="counter-value" data-target="250000">0</h3>
-                <p>Clientes fidelizados al Programa Nobile Plus</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="section-modelos">
-        <div class="container-modelos">
-            
-            <div class="grid-cards">
-                <div class="card-item">
-                    <img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Fachada-Hotel-Nobile-1.png" alt="Administración">
-                    <div class="card-content">
-                        <h3>ADMINISTRACIÓN Y GESTIÓN</h3>
-                        <p>Contenido en actualización. Estamos preparando información detallada sobre este modelo. Pronto tendremos novedades.</p>
-                    </div>
-                </div>
-
-                <div class="card-item">
-                    <img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Selo-Hotel-Nobile.png" alt="Afiliación Comercial">
-                    <div class="card-content">
-                        <h3>AFILIACIÓN COMERCIAL</h3>
-                        <p>Contenido en actualización. Estamos preparando información detallada sobre este modelo. Pronto tendremos novedades.</p>
-                    </div>
-                </div>
-
-                <div class="card-item">
-                    <img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Quarto-Hotel-Nobile.png" alt="Licencia de Marca">
-                    <div class="card-content">
-                        <h3>LICENCIA DE MARCA</h3>
-                        <p>Contenido en actualización. Estamos preparando información detallada sobre este modelo. Pronto tendremos novedades.</p>
-                    </div>
-                </div>
-            </div>
-
-            <a class="btn-azul" href="mailto:leandro.leite@v4company.com?subject=Inter%C3%A9s%20en%20Nobile%20Hotels">
-                HAGA CLIC PARA SABER MÁS
-            </a>
-
-        </div>
-    </section>
-
-    <section class="static-logos-container">
-        <div class="container-interno">
-            <div class="logo-item"><img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Nobile-Stays.png" alt="Nobile Stays"></div>
-            <div class="logo-item"><img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Nobile-Resorts.png" alt="Nobile Resorts"></div>
-            <div class="logo-item"><img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Nobile-inn.png" alt="Nobile Inn"></div>
-            <div class="logo-item"><img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Nobile-Hotels_.png" alt="Nobile Hotels"></div>
-            <div class="logo-item"><img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Nobile-Grand.png" alt="Nobile Grand"></div>
-            <div class="logo-item"><img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Nobile-Suites.png" alt="Nobile Suites"></div>
-            <div class="logo-item"><img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Logo_by-nobile_azul.png" alt="Nobile Suites"></div>
-        </div>
-    </section>
-
-    <footer class="footer-container">
-        <div class="container-interno">
-            <div class="footer-box social-icons">
-                <h3>Redes Sociales</h3>
-                <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook"></a>
-                <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"></a>
-            </div>
-            <div class="footer-box">
-                <h3>Vea También</h3>
-                <ul>
-                    <li><a href="#">Aviso Legal</a></li>
-                    <li><a href="#">Contáctenos</a></li>
-                    <li><a href="#">Política de Hospedaje</a></li>
-                    <li><a href="#">Política de Privacidad</a></li>
-                    <li><a href="#">Protocolo de Seguridad</a></li>
-                    <li><a href="#">Trabaje con Nosotros</a></li>
-                </ul>
-            </div>
-            <div class="footer-box">
-                <h3>Dónde Estamos</h3>
-                <ul>
-                    <li>Brasil</li>
-                    <li>Portugal</li>
-                    <li>Argentina</li>
-                    <li>Chile</li>
-                    <li>Paraguay</li>
-                    <li>Uruguay</li>
-                    <li>Estados Unidos</li>
-                </ul>
-            </div>
-            <div class="footer-box">
-                <h3>Apoyamos</h3>
-                <img class="apoiamos-img" src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Instituto-McDonald.png" alt="Instituto Ronald McDonald">
-            </div>
-        </div>
-    </footer>
-
-    <p class="footer-note">
-        Los hoteles pueden ser licenciados de gestión independiente o administrados por Nobile Hotels & Resorts.
-    </p>
-
-    <script>
-        // --- ANIMAÇÃO DOS NÚMEROS (CONTADORES) ---
-        const counters = document.querySelectorAll('.counter-value');
-        
-        // Função para animar
-        const animateCounters = () => {
-            counters.forEach(counter => {
-                const target = +counter.getAttribute('data-target'); // Pega o número final
-                const duration = 2000; // Duração total da animação em ms
-                const increment = target / (duration / 20); // Quanto aumenta a cada 20ms
-                
-                let current = 0;
-                
-                const updateCounter = () => {
-                    current += increment;
-                    
-                    if(current < target) {
-                        // Formata o número (ex: 3000000 vira 3.000.000)
-                        counter.innerText = "+" + Math.ceil(current).toLocaleString('pt-BR'); 
-                        setTimeout(updateCounter, 20);
-                    } else {
-                        counter.innerText = "+" + target.toLocaleString('pt-BR');
-                    }
-                };
-                
-                updateCounter();
-            });
-        };
-
-        // Usa IntersectionObserver para disparar a animação só quando a seção aparecer na tela
-        const observerOptions = {
-            threshold: 0.5 // Dispara quando 50% do elemento estiver visível
-        };
-
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    animateCounters();
-                    observer.disconnect(); // Para de observar depois que animou uma vez
-                }
-            });
-        }, observerOptions);
-
-        // Começa a observar a seção dos contadores
-        const counterSection = document.querySelector('.whatsapp1');
-        if(counterSection) {
-            observer.observe(counterSection);
-        } else {
-            window.addEventListener('load', animateCounters);
-        }
-    </script>
-</body>
-</html>
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5DM888MF"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script type="text/javascript">
+    var _ss = _ss || [];
+    _ss.push(['_setDomain', 'https://koi-3QNT5MG8T0.marketingautomation.services/net']);
+    _ss.push(['_setAccount', 'KOI-4JEBEJLSUG']);
+    _ss.push(['_trackPageView']);
+    window._pa = window._pa || {};
+    
+    (function() {
+        var ss = document.createElement('script');
+        ss.type = 'text/javascript'; ss.async = true;
+        ss.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'koi-3QNT5MG8T0.marketingautomation.services/client/ss.js?ver=2.4.0';
+        var scr = document.getElementsByTagName('script')[0];
+        scr.parentNode.insertBefore(ss, scr);
+    })();
+</script>
