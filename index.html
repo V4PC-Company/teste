@@ -5,16 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nobile Hotels & Resorts</title>
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-
     <style type="text/css">
         /* =========================================
            ESTILOS GERAIS E RESET
            ========================================= */
         * { box-sizing: border-box; }
         
-        /* 'overflow-x: hidden' impede a barra de rolagem horizontal 
-           criada pelo truque de tela cheia (100vw) */
         body { 
             margin: 0; 
             padding: 0; 
@@ -23,28 +19,22 @@
             font-family: sans-serif; 
         }
 
-        /* --- CLASSE MESTRA PARA CONTEÚDO FLUIDO ---
-           Isso garante que o conteúdo estique (acompanhe a tela),
-           mas mantenha 5% de margem de cada lado (90% de largura total).
-        */
         .conteudo-fluido {
-            width: 90%;        /* Ocupa 90% da tela disponível */
-            max-width: 100%;   /* Remove travas de pixels (ex: 1600px) */
-            margin: 0 auto;    /* Centraliza o bloco na tela */
+            width: 90%;       
+            max-width: 100%;  
+            margin: 0 auto;   
         }
 
         /* =========================================
            BANNER TOPO
            ========================================= */
         .banner_topo {
-            /* Truque para fundo 100% da tela */
             width: 100vw;
             margin-left: calc(50% - 50vw);
-            
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 80px 0; /* Padding vertical apenas */
+            padding: 80px 0;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -53,11 +43,9 @@
         }
         
         .banner_topo .container {
-            /* Usa a lógica fluida: estica mas não encosta */
             width: 90%; 
             max-width: 100%;
             margin: 0 auto;
-            
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
@@ -111,23 +99,17 @@
            SOLUÇÕES
            ========================================= */
         .solu-empresa {
-            /* Fundo branco tela cheia */
             width: 100vw;
             margin-left: calc(50% - 50vw);
-            
             background: #fff; 
-            border-radius: 0; 
-            margin-top: 0; 
-            padding: 60px 0; /* Padding vertical apenas */
+            padding: 60px 0;
             position: relative; z-index: 5;
             box-shadow: 0 5px 20px rgba(0,0,0,0.05);
         }
         .solu-empresa .area_flex {
-            /* Lógica fluida aplicada */
             width: 90%; 
             max-width: 100%; 
             margin: 0 auto;
-            
             display: flex; flex-flow: row wrap; justify-content: center; align-items: center; gap: 50px;
         }
         .solu-empresa .caixa { flex: 1; text-align: left; }
@@ -152,12 +134,10 @@
            CONTADORES (Pílula)
            ========================================= */
         .whatsapp1 {
-            /* Pílula: 90% da tela, centralizada */
             width: 90%; 
             max-width: 100%; 
             margin: 60px auto; 
-            border-radius: 100px; /* Formato pílula */
-            
+            border-radius: 100px;
             padding: 40px 20px; 
             background: linear-gradient(to right, #2A7FA1, #26377F);
             position: relative;
@@ -179,78 +159,116 @@
         }
 
         /* =========================================
-           CARROSEL
+           NOVOS MODELOS (SUBSTITUI CARROSEL)
            ========================================= */
-        .section-carrossel {
-            /* Fundo branco tela cheia */
+        .section-modelos {
             width: 100vw;
             margin-left: calc(50% - 50vw);
-
-            display: flex; align-items: center; justify-content: center;
-            padding: 60px 0; 
-            background-color: #fff; 
-            border-radius: 0; 
-            overflow: hidden;
-            box-shadow: none;
+            background-color: #fff;
+            padding: 60px 0;
+            display: flex; justify-content: center;
         }
-        /* Container interno fluído */
-        .section-carrossel .container-interno {
-            width: 90%; /* Estica, mas não encosta */
-            max-width: 100%; 
+
+        .container-modelos {
+            width: 90%;
+            max-width: 100%;
             margin: 0 auto;
-            
-            display: flex; align-items: center; justify-content: space-between; gap: 80px;
+            text-align: center;
         }
 
-        .section-carrossel .texto {
-            flex: 1; max-width: 600px; display: flex; flex-direction: column; align-items: flex-start;
-            transition: opacity 0.3s ease;
+        /* Grid para as 3 colunas */
+        .grid-cards {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Alinha no topo */
+            gap: 40px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
         }
-        .section-carrossel .texto.fade-out {
-            opacity: 0;
+
+        .card-item {
+            flex: 1;
+            min-width: 300px;
+            background: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.4s ease; /* Efeito suave de transição */
+            cursor: pointer;
+            padding-bottom: 20px;
+            border: 1px solid #eee;
         }
-        .section-carrossel h2 {
-            color: #1b3b6f; font-size: 38px; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; line-height: 1.2;
+
+        /* O efeito HOVER solicitado */
+        .card-item:hover {
+            transform: translateY(-10px); /* Sobe 10px */
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15); /* Aumenta a sombra */
         }
-        .section-carrossel p { font-size: 18px; color: #333; margin-bottom: 30px; line-height: 1.6; }
+
+        .card-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-content {
+            padding: 25px 20px;
+        }
+
+        .card-content h3 {
+            color: #1b3b6f;
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            line-height: 1.3;
+        }
+
+        .card-content p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Botão centralizado */
         .btn-azul {
-            display: inline-block; background-color: #1b3b6f; color: #fff; padding: 18px 40px;
-            border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 16px;
-            text-transform: uppercase; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            display: inline-block; 
+            background-color: #1b3b6f; 
+            color: #fff; 
+            padding: 18px 50px;
+            border-radius: 8px; 
+            text-decoration: none; 
+            font-weight: 700; 
+            font-size: 16px;
+            text-transform: uppercase; 
+            transition: all 0.3s ease; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
-        .btn-azul:hover { background-color: #2a5298; transform: translateY(-2px); }
-        
-        .swiper { width: 100%; max-width: 600px; height: 500px; position: relative; overflow: hidden; flex-shrink: 0; }
-        .swiper-slide { border-radius: 20px; overflow: hidden; transition: all 0.4s ease; }
-        .swiper-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        
+        .btn-azul:hover { 
+            background-color: #2a5298; 
+            transform: translateY(-2px); 
+        }
+
         @media (max-width: 991px) {
-            .section-carrossel .container-interno { flex-direction: column; text-align: center; gap: 40px; width: 90%; }
-            .section-carrossel .texto { align-items: center; }
-            .swiper { width: 100%; height: 400px; }
-            .btn-azul { width: 100%; text-align: center; }
-            .section-carrossel h2 { font-size: 30px; }
+            .grid-cards { flex-direction: column; align-items: center; }
+            .card-item { width: 100%; max-width: 500px; }
+            .btn-azul { width: 100%; max-width: 400px; text-align: center; }
         }
 
         /* =========================================
            LOGOS ESTÁTICOS
            ========================================= */
         .static-logos-container {
-            /* Fundo tela cheia (se tivesse cor, aqui é transparente/branco do body) */
             width: 100vw;
             margin-left: calc(50% - 50vw);
-            
             margin-top: 60px; margin-bottom: 60px;
             display: flex;
             justify-content: center; align-items: center;
-            padding: 0;
         }
         .static-logos-container .container-interno {
-             /* Estica com a tela */
-             width: 90%; 
-             max-width: 100%; 
-             margin: 0 auto;
-             
+             width: 90%; max-width: 100%; margin: 0 auto;
              display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: nowrap;
         }
         .static-logos-container .logo-item { flex: 1; display: flex; justify-content: center; align-items: center; }
@@ -271,20 +289,14 @@
            FOOTER
            ========================================= */
         .footer-container {
-            /* Fundo tela cheia */
             width: 100vw;
             margin-left: calc(50% - 50vw);
-
             display: flex; justify-content: center; flex-wrap: wrap;
             padding: 60px 0; 
-            background-color: #f9f9f9; /* Mantém o fundo cinza claro */
+            background-color: #f9f9f9;
         }
         .footer-container .container-interno {
-             /* Estica com a tela */
-             width: 90%; 
-             max-width: 100%; 
-             margin: 0 auto;
-             
+             width: 90%; max-width: 100%; margin: 0 auto;
              display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px;
         }
         .footer-box h3 { font-size: 22px; margin-bottom: 20px; font-weight: bold; color: #1a1a1a; }
@@ -381,31 +393,39 @@
         </div>
     </section>
 
-    <section class="section-carrossel">
-        <div class="container-interno">
-            <div class="texto" id="swiper-text-content">
-                <h2 id="dynamic-title">ADMINISTRACIÓN Y GESTIÓN</h2>
-                <p id="dynamic-desc">
-                    Contenido en actualización. Estamos preparando información detallada sobre este modelo. Pronto tendremos novedades.
-                </p>
-                <a id="dynamic-btn" class="btn-azul" href="mailto:leandro.leite@v4company.com?subject=Inter%C3%A9s%20en%20Administraci%C3%B3n">
-                    HAGA CLIC PARA SABER MÁS
-                </a>
-            </div>
+    <section class="section-modelos">
+        <div class="container-modelos">
             
-            <div class="swiper">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Fachada-Hotel-Nobile-1.png" alt="Administración">
+            <div class="grid-cards">
+                <div class="card-item">
+                    <img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Fachada-Hotel-Nobile-1.png" alt="Administración">
+                    <div class="card-content">
+                        <h3>ADMINISTRACIÓN Y GESTIÓN</h3>
+                        <p>Contenido en actualización. Estamos preparando información detallada sobre este modelo. Pronto tendremos novedades.</p>
                     </div>
-                    <div class="swiper-slide">
-                        <img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Selo-Hotel-Nobile.png" alt="Afiliación Comercial">
+                </div>
+
+                <div class="card-item">
+                    <img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Selo-Hotel-Nobile.png" alt="Afiliación Comercial">
+                    <div class="card-content">
+                        <h3>AFILIACIÓN COMERCIAL</h3>
+                        <p>Contenido en actualización. Estamos preparando información detallada sobre este modelo. Pronto tendremos novedades.</p>
                     </div>
-                    <div class="swiper-slide">
-                        <img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Quarto-Hotel-Nobile.png" alt="Licencia de Marca">
+                </div>
+
+                <div class="card-item">
+                    <img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Quarto-Hotel-Nobile.png" alt="Licencia de Marca">
+                    <div class="card-content">
+                        <h3>LICENCIA DE MARCA</h3>
+                        <p>Contenido en actualización. Estamos preparando información detallada sobre este modelo. Pronto tendremos novedades.</p>
                     </div>
                 </div>
             </div>
+
+            <a class="btn-azul" href="mailto:leandro.leite@v4company.com?subject=Inter%C3%A9s%20en%20Nobile%20Hotels">
+                HAGA CLIC PARA SABER MÁS
+            </a>
+
         </div>
     </section>
 
@@ -462,75 +482,8 @@
         Los hoteles pueden ser licenciados de gestión independiente o administrados por Nobile Hotels & Resorts.
     </p>
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        // --- 1. CONFIGURAÇÃO DOS DADOS DO CARROSSEL ---
-        // Aqui definimos qual texto aparece para cada imagem (slide 0, 1 e 2)
-        const slideContent = [
-            {
-                title: "ADMINISTRACIÓN Y GESTIÓN",
-                text: "Contenido en actualización. Estamos preparando información detallada sobre este modelo. Pronto tendremos novedades.",
-                emailSubject: "Interés en Administración y Gestión"
-            },
-            {
-                title: "AFILIACIÓN COMERCIAL",
-                text: "Contenido en actualización. Estamos preparando información detallada sobre este modelo. Pronto tendremos novedades.",
-                emailSubject: "Interés en Afiliación Comercial"
-            },
-            {
-                title: "LICENCIA DE MARCA",
-                text: "Contenido en actualización. Estamos preparando información detallada sobre este modelo. Pronto tendremos novedades.",
-                emailSubject: "Interés en Licencia de Marca"
-            }
-        ];
-
-        // Elementos do DOM que vamos atualizar
-        const domTitle = document.getElementById('dynamic-title');
-        const domDesc = document.getElementById('dynamic-desc');
-        const domBtn = document.getElementById('dynamic-btn');
-        const textContainer = document.getElementById('swiper-text-content');
-
-        // --- 2. INICIALIZAÇÃO DO SWIPER ---
-        var swiper = new Swiper(".swiper", {
-            effect: "coverflow",
-            grabCursor: true,
-            centeredSlides: true,
-            slidesPerView: "auto",
-            coverflowEffect: {
-                rotate: 0,
-                stretch: 0,
-                depth: 100,
-                modifier: 1,
-                slideShadows: true,
-            },
-            loop: true,
-            autoplay: {
-                delay: 4000, // Tempo de 4 segundos
-                disableOnInteraction: false,
-            },
-            // Evento disparado sempre que o slide muda
-            on: {
-                slideChange: function () {
-                    // O 'realIndex' garante que peguemos o índice correto (0, 1 ou 2) mesmo com loop
-                    const index = this.realIndex;
-                    
-                    // Pequena animação de fade no texto
-                    textContainer.classList.add('fade-out');
-
-                    setTimeout(() => {
-                        // Atualiza o texto e link
-                        domTitle.innerText = slideContent[index].title;
-                        domDesc.innerText = slideContent[index].text;
-                        domBtn.href = "mailto:leandro.leite@v4company.com?subject=" + encodeURIComponent(slideContent[index].emailSubject);
-                        
-                        // Remove o fade para o texto aparecer de novo
-                        textContainer.classList.remove('fade-out');
-                    }, 300); // Espera 300ms (tempo do fade) para trocar
-                }
-            }
-        });
-
-        // --- 3. ANIMAÇÃO DOS NÚMEROS (CONTADORES) ---
+        // --- ANIMAÇÃO DOS NÚMEROS (CONTADORES) ---
         const counters = document.querySelectorAll('.counter-value');
         
         // Função para animar
@@ -577,10 +530,8 @@
         if(counterSection) {
             observer.observe(counterSection);
         } else {
-            // Fallback: se não achar a seção, anima ao carregar a página
             window.addEventListener('load', animateCounters);
         }
-
     </script>
 </body>
 </html>
