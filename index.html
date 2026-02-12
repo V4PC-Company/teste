@@ -195,8 +195,10 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             transition: all 0.4s ease; /* Efeito suave de transição */
             cursor: pointer;
-            padding-bottom: 20px;
+            padding-bottom: 25px; /* Aumentei um pouco para caber o botão */
             border: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
         }
 
         /* O efeito HOVER solicitado */
@@ -214,6 +216,9 @@
 
         .card-content {
             padding: 25px 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .card-content h3 {
@@ -229,7 +234,32 @@
             font-size: 16px;
             color: #555;
             line-height: 1.5;
-            margin: 0;
+            margin: 0 0 20px 0; /* Margem inferior para afastar do botão */
+        }
+
+        /* =========================================
+           NOVO ESTILO DO BOTÃO PDF
+           ========================================= */
+        .btn-pdf {
+            display: inline-block;
+            margin-top: auto; /* Empurra o botão para baixo se o texto for curto */
+            align-self: center;
+            padding: 10px 25px;
+            border: 2px solid #1b3b6f; /* Azul da marca */
+            color: #1b3b6f;
+            background-color: transparent;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            border-radius: 50px; /* Borda arredondada */
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .btn-pdf:hover {
+            background-color: #1b3b6f;
+            color: #fff; /* Fica azul com texto branco ao passar o mouse */
+            transform: translateY(-2px);
         }
 
         /* Botão centralizado */
@@ -402,6 +432,10 @@
                     <div class="card-content">
                         <h3>ADMINISTRACIÓN Y GESTIÓN</h3>
                         <p>Ofrecer una gestión integral en todas las áreas del hotel en la búsqueda de aumentar las rentabilidades.</p>
+                        
+                        <a class="btn-pdf" href="SEU_LINK_DO_PDF_AQUI.pdf" target="_blank" download>
+                            DESCARGAR PDF
+                        </a>
                     </div>
                 </div>
 
@@ -410,6 +444,10 @@
                     <div class="card-content">
                         <h3>AFILIACIÓN COMERCIAL</h3>
                         <p>La afiliación comercial con By Nobile ofrece al hotel una optimización integral de su comercialización y distribución, asegurando mayor ocupación y rentabilidad.</p>
+                        
+                        <a class="btn-pdf" href="SEU_LINK_DO_PDF_AQUI.pdf" target="_blank" download>
+                            DESCARGAR PDF
+                        </a>
                     </div>
                 </div>
 
@@ -418,6 +456,10 @@
                     <div class="card-content">
                         <h3>LICENCIA DE MARCA</h3>
                         <p>Padronización y posicionamiento de marca Nobile, asesoramiento operativo hotelero, implantación y uso de Tecnología Operativa, gestión, distribución y asesoramiento comercial.</p>
+                        
+                        <a class="btn-pdf" href="SEU_LINK_DO_PDF_AQUI.pdf" target="_blank" download>
+                            DESCARGAR PDF
+                        </a>
                     </div>
                 </div>
             </div>
