@@ -61,13 +61,14 @@
             padding-right: 20px;
         }
 
-        /* --- ESTILO DA LOGO (ARQUIVO LOCAL WEBP) --- */
+        /* --- ESTILO DA LOGO COM FILTRO MÁGICO --- */
         .logo-topo {
             max-width: 220px; /* Tamanho da logo */
             height: auto;
             margin-bottom: 30px; /* Espaço entre a logo e o título */
             display: block;
-            /* Filtro removido pois a imagem já é branca */
+            /* ESSE COMANDO TRANSFORMA A LOGO PRETA EM BRANCA: */
+            filter: brightness(0) invert(1); 
         }
 
         .banner_topo h1 {
@@ -379,7 +380,7 @@
     <section class="banner_topo">
         <div class="container">
             <div class="texto-banner">
-                <img src="LOGO-NOBILE.webp" alt="Nobile Hotels & Resorts" class="logo-topo">
+                <img src="https://www.nobilehoteis.com.br/landingpages/wp-content/uploads/2025/11/Nobile-Hotels_.png" alt="Nobile Hotels & Resorts" class="logo-topo">
 
                 <h1>Gestión, Posicionamiento y Ventas para rentabilizar su hotel</h1>
                 <p>Agregue valor estratégico a su hotel con gestión integral, padrones de marca y distribución global</p>
