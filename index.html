@@ -60,6 +60,15 @@
             color: #fff;
             padding-right: 20px;
         }
+
+        /* --- ESTILO DA NOVA LOGO NO BANNER --- */
+        .logo-topo {
+            max-width: 220px; /* Tamanho da logo */
+            height: auto;
+            margin-bottom: 30px; /* Espaço entre a logo e o título */
+            display: block;
+        }
+
         .banner_topo h1 {
             color: #fff; font-size: 48px; margin-bottom: 20px; font-weight: bold; line-height: 1.2;
         }
@@ -91,6 +100,10 @@
             }
             .banner_topo .container { flex-direction: column; text-align: center; width: 90%; }
             .banner_topo .texto-banner { text-align: center; padding-right: 0; margin-bottom: 20px; }
+            
+            /* Centraliza a logo no mobile */
+            .logo-topo { margin: 0 auto 20px auto; max-width: 180px; }
+
             .banner_topo h1 { font-size: 32px; }
             .form-box-topo { width: 100%; }
         }
@@ -299,7 +312,7 @@
             .grid-cards { flex-direction: column; align-items: center; }
             .card-item { width: 100%; max-width: 500px; }
             .btn-azul { width: 100%; max-width: 400px; text-align: center; }
-            .section-modelos h2 { font-size: 18px; padding: 0 10px; } /* Ajuste responsivo */
+            .section-modelos h2 { font-size: 18px; padding: 0 10px; }
         }
 
         /* =========================================
@@ -365,6 +378,8 @@
     <section class="banner_topo">
         <div class="container">
             <div class="texto-banner">
+                <img src="logo-nobile.png" alt="Nobile Hotels & Resorts" class="logo-topo">
+
                 <h1>Gestión, Posicionamiento y Ventas para rentabilizar su hotel</h1>
                 <p>Agregue valor estratégico a su hotel con gestión integral, padrones de marca y distribución global</p>
             </div>
